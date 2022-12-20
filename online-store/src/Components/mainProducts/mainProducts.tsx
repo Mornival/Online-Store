@@ -1,6 +1,7 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
 import {useEffect, useState} from 'react';
 import { dataProducts } from '../../data/data';
+import {IProduct} from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
@@ -8,8 +9,31 @@ import smallMenu from './big.svg';
 const MainProducts = () => {
     const {products, total} = dataProducts;
     const [widthCard, setWidthCard] = useState(350);
-    function changeSize(size:number) {
+    const [searchData, setSearchData] = useState('');
+    
+    function changeSize(size:number):void {
         setWidthCard(size);
+    }
+
+    function searchProducts(products: IProduct[], searchData: string):IProduct[] {
+        if (searchData.length === 0) {
+            return products;
+        }
+
+        return products.filter(item => {
+            return item.category.toLowerCase().indexOf(searchData.toLowerCase()) > -1 || 
+            item.brand.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
+            item.title.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
+            item.price.toString().indexOf(searchData) > -1 ||
+            item.stock.toString().indexOf(searchData) > -1 ||
+            item.rating.toString().indexOf(searchData) > -1 ||
+            item.discountPercentage.toString().indexOf(searchData) > -1
+        })
+    }
+
+    function onUpdateSearch(e:React.ChangeEvent<HTMLInputElement>):void{
+        const searchValue = (e.target as HTMLInputElement).value;
+        setSearchData(searchValue);
     }
 
     useEffect(()=>{
@@ -32,10 +56,10 @@ const MainProducts = () => {
                     <option value="discount-DESC">Sort by discount DESC</option>
                 </select>
                 <div className="products__header__found">
-                    Found: <span>{total}</span>
+                    Found: <span>{searchProducts(products,searchData).length}</span>
                 </div>
                 <div className='products__header__search'>
-                    <input placeholder='Search product' type="text" />
+                    <input onChange={onUpdateSearch} placeholder='Search product' type="text" />
                 </div>
                 <div className="products__header__buttons">
                     <button onClick={()=>changeSize(260)} className='small'>
@@ -47,18 +71,21 @@ const MainProducts = () => {
                 </div>
             </div>
             <div className="products__items">
-                {products.map(item => (
-                    <MainProductsItem key={item.id}
-                                      title={item.title}
-                                      price={item.price}
-                                      discountPercentage={item.discountPercentage}
-                                      rating={item.rating}
-                                      stock={item.stock}
-                                      brand={item.brand}
-                                      category={item.category}
-                                      thumbnail={item.thumbnail}
-                                      widthCard={widthCard}/>
-                ))}
+                {searchProducts(products, searchData).length ?
+                    searchProducts(products, searchData).map(item => (
+                        <MainProductsItem key={item.id}
+                            title={item.title}
+                            price={item.price}
+                            discountPercentage={item.discountPercentage}
+                            rating={item.rating}
+                            stock={item.stock}
+                            brand={item.brand}
+                            category={item.category}
+                            thumbnail={item.thumbnail}
+                            widthCard={widthCard} />
+                    )) :
+                    <div className='not-found'>No products found...	&#9785;</div>
+                }
             </div>
         </div>
     );

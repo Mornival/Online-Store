@@ -3,6 +3,7 @@
     background-color: #181a1c;
     padding: 15px;
     border-radius: 10px;
+    height: fit-content;
 
     &__header {
         display: flex;
@@ -81,8 +82,15 @@
         margin-top: 20px;
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        align-items: space-between;
+        justify-content: center;
+        gap: 16px;
         flex-wrap: wrap;
     }
+}
+
+.not-found {
+    color: lightgrey;
+    font-size: 36px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
