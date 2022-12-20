@@ -10,12 +10,16 @@ interface ICard {
     brand: string,
     category: string,
     thumbnail: string
-
+    widthCard:number
 }
 
-const MainProductsItem = ({title,price,discountPercentage, rating, stock, brand, category, thumbnail}:ICard) => {
+const MainProductsItem = ({title,price,discountPercentage, rating, stock, brand, category, thumbnail, widthCard}:ICard) => {
+   
     return (
-        <div style={{'backgroundImage': `url('${thumbnail}')`}} className="card">
+        <div style={{
+            'backgroundImage': `url('${thumbnail}')`,
+            'width': `${widthCard}px`
+            }} className="card">
             <div className="card__title">{title}</div>
             <div className="card__data">
                 <div>Category:  <span>{category}</span></div>

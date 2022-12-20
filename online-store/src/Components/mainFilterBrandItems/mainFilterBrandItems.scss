@@ -5,8 +5,20 @@
     height: 30px;
     padding-right: 15px;
 
+    input {
+        cursor: pointer;
+        &:hover{
+            transform: scale(1.05);
+            box-shadow: 0 0 7px #fff;
+        }
+    }
+
     label{
+        cursor: pointer;
         margin-left: 10px;
+        &:hover{
+            transform: scale(1.05);
+        }
     }
     span{
         margin-left: 10px;

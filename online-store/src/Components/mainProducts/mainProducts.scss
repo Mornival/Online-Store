@@ -56,17 +56,18 @@
                 cursor: pointer;
                 width: 36px;
                 height: 36px;
-                border: 1px solid lightgrey;
+                border: none;
                 background-color:#181a1c;
                 border-radius: 5px;
-                transition: .5s;
                 color: lightgrey;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                transition: .5s;
 
-                &:hover, &:active{
-                    transform: scale(1.1);
+                &:hover, &.active{
+                    transform: scale(1.15);
+                    box-shadow: 0 0 2px  #fff;
                 }
 
                 img{

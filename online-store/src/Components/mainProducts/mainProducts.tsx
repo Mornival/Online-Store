@@ -1,5 +1,5 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import { dataProducts } from '../../data/data';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
@@ -7,6 +7,18 @@ import smallMenu from './big.svg';
 
 const MainProducts = () => {
     const {products, total} = dataProducts;
+    const [widthCard, setWidthCard] = useState(350);
+    function changeSize(size:number) {
+        setWidthCard(size);
+    }
+
+    useEffect(()=>{
+        const smallButton = document.querySelector('.small') as HTMLElement;
+        const bigButton = document.querySelector('.big') as HTMLElement;
+        widthCard === 260 ? smallButton.className = 'small active' : smallButton.className = 'small'; 
+        widthCard === 350 ? bigButton.className = 'big active' : bigButton.className = 'big'; 
+    });
+
     return (
         <div className="products">
             <div className="products__header">
@@ -26,10 +38,10 @@ const MainProducts = () => {
                     <input placeholder='Search product' type="text" />
                 </div>
                 <div className="products__header__buttons">
-                    <button className='small'>
+                    <button onClick={()=>changeSize(260)} className='small'>
                         <img src={smallMenu} alt="small-menu" />
                     </button>
-                    <button  className='big'>
+                    <button onClick={()=>changeSize(350)}  className="big">
                         <img src={bigMenu} alt="big-menu" />
                     </button>
                 </div>
@@ -44,7 +56,8 @@ const MainProducts = () => {
                                       stock={item.stock}
                                       brand={item.brand}
                                       category={item.category}
-                                      thumbnail={item.thumbnail}/>
+                                      thumbnail={item.thumbnail}
+                                      widthCard={widthCard}/>
                 ))}
             </div>
         </div>

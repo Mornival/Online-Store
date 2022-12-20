@@ -18,7 +18,6 @@ function App() {
         </MainFilters>
         <MainProducts />
       </MainContent>
-      
       <MainFooter/>
     </>
   );
