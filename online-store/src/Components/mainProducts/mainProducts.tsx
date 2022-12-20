@@ -7,9 +7,10 @@ import bigMenu from './small.svg';
 import smallMenu from './big.svg';
 
 const MainProducts = () => {
-    const {products, total} = dataProducts;
+    const {products} = dataProducts;
     const [widthCard, setWidthCard] = useState(350);
     const [searchData, setSearchData] = useState('');
+    const [kindOfSort, setKindOfSort] = useState('price-ASC');
     
     function changeSize(size:number):void {
         setWidthCard(size);
@@ -43,11 +44,41 @@ const MainProducts = () => {
         widthCard === 350 ? bigButton.className = 'big active' : bigButton.className = 'big'; 
     });
 
+    function onUpdateSort(e:React.ChangeEvent<HTMLSelectElement> ) {
+        const whatSort:string = e.target.value;
+        setKindOfSort(whatSort);
+    }
+
+    function sortProducts (products:IProduct[], kindOfSort:string):IProduct[] {
+        switch (kindOfSort) {
+            case 'price-ASC':
+                return products.sort((a,b) => a.price - b.price);
+            case 'prise-DESC':
+                return products.sort((a,b) => b.price - a.price);
+            case 'rating-ASC':
+                return products.sort((a,b) => a.rating - b.rating);
+            case 'rating-DESC':
+                return products.sort((a,b) => b.rating - a.rating);
+            case 'discount-ASC':
+                return products.sort((a,b) => a.discountPercentage - b.discountPercentage);
+            case 'discount-DESC':
+                return products.sort((a,b) => b.discountPercentage - a.discountPercentage);
+                default:
+                return products;
+        }
+
+    }
+
+    const visibleProducts = () => {
+        return searchProducts(sortProducts(products, kindOfSort), searchData);
+    }
+    
+
     return (
         <div className="products">
             <div className="products__header">
-                <select className='products__header__select' name="sorts" id="sorts-select">
-                    <option value="">Sort options: </option>
+                <select onChange={onUpdateSort} className='products__header__select' name="sorts" id="sorts-select">
+                    <option value="" disabled>Sort options: </option>
                     <option value="price-ASC">Sort by price ASC</option>
                     <option value="prise-DESC">Sort by price DESC</option>
                     <option value="rating-ASC">Sort by rating ASC</option>
@@ -71,8 +102,8 @@ const MainProducts = () => {
                 </div>
             </div>
             <div className="products__items">
-                {searchProducts(products, searchData).length ?
-                    searchProducts(products, searchData).map(item => (
+                {visibleProducts().length ?
+                    visibleProducts().map(item => (
                         <MainProductsItem key={item.id}
                             title={item.title}
                             price={item.price}
