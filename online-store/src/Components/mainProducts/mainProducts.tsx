@@ -6,7 +6,7 @@ import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
 
-const MainProducts = () => {
+const MainProducts = ({updateCountCart}:{updateCountCart: (added:boolean)=>void}) => {
     const {products} = dataProducts;
     const [widthCard, setWidthCard] = useState(350);
     const [searchData, setSearchData] = useState('');
@@ -50,21 +50,22 @@ const MainProducts = () => {
     }
 
     function sortProducts (products:IProduct[], kindOfSort:string):IProduct[] {
+        const res = [...products];
         switch (kindOfSort) {
             case 'price-ASC':
-                return products.sort((a,b) => a.price - b.price);
+                return res.sort((a,b) => a.price - b.price);
             case 'prise-DESC':
-                return products.sort((a,b) => b.price - a.price);
+                return res.sort((a,b) => b.price - a.price);
             case 'rating-ASC':
-                return products.sort((a,b) => a.rating - b.rating);
+                return res.sort((a,b) => a.rating - b.rating);
             case 'rating-DESC':
-                return products.sort((a,b) => b.rating - a.rating);
+                return res.sort((a,b) => b.rating - a.rating);
             case 'discount-ASC':
-                return products.sort((a,b) => a.discountPercentage - b.discountPercentage);
+                return res.sort((a,b) => a.discountPercentage - b.discountPercentage);
             case 'discount-DESC':
-                return products.sort((a,b) => b.discountPercentage - a.discountPercentage);
+                return res.sort((a,b) => b.discountPercentage - a.discountPercentage);
                 default:
-                return products;
+                return res;
         }
 
     }
@@ -113,7 +114,8 @@ const MainProducts = () => {
                             brand={item.brand}
                             category={item.category}
                             thumbnail={item.thumbnail}
-                            widthCard={widthCard} />
+                            widthCard={widthCard}
+                            updateCountCart={(added:boolean):void=>updateCountCart(added)}/>
                     )) :
                     <div className='not-found'>No products found...	&#9785;</div>
                 }

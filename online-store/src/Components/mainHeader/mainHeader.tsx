@@ -2,7 +2,7 @@ import './mainHeader.scss';
 import cartImage from './cart.png';
 import logoImage from './packet.svg';
 
-const MainHeader = () => {
+const MainHeader = ({countCart}:{countCart:number}) => {
     return (
         <header className='header'>
             <div className="container">
@@ -15,7 +15,7 @@ const MainHeader = () => {
                 </div>
                 <div className='header__cart'>
                     <img src={cartImage} alt="packet" />
-                    <div className='header__cart__count'>0</div>
+                    <div className='header__cart__count'>{countCart}</div>
                 </div>
             </div>
         </header>

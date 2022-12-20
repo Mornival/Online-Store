@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react';
 import './mainProductsItem.scss';
 
 interface ICard {
@@ -9,16 +10,26 @@ interface ICard {
     stock: number,
     brand: string,
     category: string,
-    thumbnail: string
-    widthCard:number
+    thumbnail: string,
+    widthCard:number,
+    updateCountCart:(added:boolean)=>void
 }
 
-const MainProductsItem = ({title,price,discountPercentage, rating, stock, brand, category, thumbnail, widthCard}:ICard) => {
+const MainProductsItem = ({ title, price, discountPercentage, rating, stock, brand, category, thumbnail, widthCard, updateCountCart }: ICard) => {
+   const [buttonState, setButtonState] = useState(true);
+   const boxShadow = buttonState ? 'none' : '0 0 25px wheat';
    
+
+   function onAddCart() {
+        setButtonState(buttonState => !buttonState);
+        updateCountCart(buttonState);
+   }
+
     return (
         <div style={{
             'backgroundImage': `url('${thumbnail}')`,
-            'width': `${widthCard}px`
+            'width': `${widthCard}px`,
+            'boxShadow': `${boxShadow}`
             }} className="card">
             <div className="card__title">{title}</div>
             <div className="card__data">
@@ -30,7 +41,7 @@ const MainProductsItem = ({title,price,discountPercentage, rating, stock, brand,
                 <div>Stock:  <span>{stock}</span></div>
             </div>
             <div className="card__buttons">
-                <button>ADD TO CART</button>
+                <button onClick={()=>onAddCart()}>{buttonState ? 'ADD TO CART' : 'DROP FROM CART'}</button>
                 <button>DETAILS</button>
             </div>
         </div>

@@ -8,6 +8,7 @@ import MainProducts from './Components/mainProducts/mainProducts';
 import MainFooter from './Components/mainFooter/mainFooter';
 import { dataProducts } from './data/data';
 import './App.scss';
+import { useState } from 'react';
 
 function App() {
   const {products} = dataProducts;
@@ -17,9 +18,15 @@ function App() {
   const [minPrice, maxPrice]:number[] = [Math.min(...prices),Math.max(...prices)];
   const [minStock, maxStock]:number[] = [Math.min(...stocks),Math.max(...stocks)];
 
+  const [countCart, setCountCart] = useState(0);
+
+  function updateCountCart(added:boolean):void{
+    setCountCart(countCart => added ? countCart += 1 : countCart -= 1);
+  }
+
   return (
     <>
-      <MainHeader />
+      <MainHeader countCart={countCart}/>
       <MainContent>
         <MainFilters>
           <MainFilterCategory />
@@ -31,7 +38,7 @@ function App() {
                                 minValue={minStock}
                                 maxValue={maxStock}/>
         </MainFilters>
-        <MainProducts />
+        <MainProducts updateCountCart={(added:boolean):void=>updateCountCart(added)} />
       </MainContent>
       <MainFooter/>
     </>
