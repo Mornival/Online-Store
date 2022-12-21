@@ -1,5 +1,5 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import { dataProducts } from '../../data/data';
 import {IProduct} from '../../types/types';
 import './mainProducts.scss';
@@ -82,9 +82,8 @@ const MainProducts = () => {
     }
 
     useEffect(()=>{
-        setDataSort(dataSort=>[...visibleProducts()]);
-    });
-
+       setDataSort(dataSort => visibleProducts());
+    },[searchData]);
 
     return (
         <div className="products">
