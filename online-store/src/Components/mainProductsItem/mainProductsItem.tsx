@@ -4,27 +4,28 @@ import ContextProducts from '../context/contextProducts';
 import { ICard } from '../../types/types';
 
 
-const MainProductsItem = ({ id, title, price, discountPercentage, rating, stock, brand, category, thumbnail, widthCard }: ICard) => {
-   const [buttonState, setButtonState] = useState(true);
-   const boxShadow = buttonState ? 'none' : '0 0 25px wheat';
-   const {dataCart, setDataCart} = useContext(ContextProducts);
+const MainProductsItem = ({objProduct, widthCard }: ICard) => {
+    const [buttonState, setButtonState] = useState(true);
+    const boxShadow = buttonState ? 'none' : '0 0 25px wheat';
+    const { dataCart, setDataCart } = useContext(ContextProducts);
+    const {id,title,price, discountPercentage,category, brand, rating, stock, thumbnail} = objProduct;
 
-   function onAddCart() {
-        if(buttonState) {
-            setDataCart([...dataCart,{id, title, price, discountPercentage, rating, stock, brand, category, thumbnail}]);
+    function onAddCart() {
+        if (buttonState) {
+            setDataCart([...dataCart, {objProduct}]);
         } else {
-            dataCart.find((item:ICard) => {
-                if(item.id === id) {
-                    setDataCart(dataCart.filter((item:ICard)=> item.id !== id));
+            dataCart.find(({objProduct}: ICard) => {
+                if (objProduct.id === id) {
+                    setDataCart(dataCart.filter(({objProduct}: ICard) => objProduct.id !== id));
                 }
             })
         }
-        setButtonState(buttonState => !buttonState);         
-   }
+        setButtonState(buttonState => !buttonState);
+    }
 
     useEffect(() => {
-        dataCart.find((item:ICard) => {
-            if (item.id === id) {
+        dataCart.find(({objProduct}: ICard) => {
+            if (objProduct.id === id) {
                 setButtonState(false);
             }
         })

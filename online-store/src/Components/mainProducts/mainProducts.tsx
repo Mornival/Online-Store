@@ -5,6 +5,9 @@ import {IProduct} from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
+import {useContext} from 'react';
+import ContextSorts from '../context/contextSort';
+
 
 const MainProducts = () => {
     const {products} = dataProducts;
@@ -12,6 +15,8 @@ const MainProducts = () => {
     const [searchData, setSearchData] = useState('');
     const [kindOfSort, setKindOfSort] = useState('price-ASC');
     
+    const {dataSort, setDataSort} = useContext(ContextSorts);
+
     function changeSize(size:number):void {
         setWidthCard(size);
     }
@@ -73,7 +78,7 @@ const MainProducts = () => {
     const visibleProducts = () => {
         return searchProducts(sortProducts(products, kindOfSort), searchData);
     }
-    
+
 
     return (
         <div className="products">
@@ -106,15 +111,16 @@ const MainProducts = () => {
                 {visibleProducts().length ?
                     visibleProducts().map(item => (
                         <MainProductsItem key={item.id}
-                            id={item.id}
-                            title={item.title}
-                            price={item.price}
-                            discountPercentage={item.discountPercentage}
-                            rating={item.rating}
-                            stock={item.stock}
-                            brand={item.brand}
-                            category={item.category}
-                            thumbnail={item.thumbnail}
+                            objProduct={item}
+                            // id={item.id}
+                            // title={item.title}
+                            // price={item.price}
+                            // discountPercentage={item.discountPercentage}
+                            // rating={item.rating}
+                            // stock={item.stock}
+                            // brand={item.brand}
+                            // category={item.category}
+                            // thumbnail={item.thumbnail}
                             widthCard={widthCard}/>
                     )) :
                     <div className='not-found'>No products found...	&#9785;</div>

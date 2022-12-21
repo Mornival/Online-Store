@@ -21,14 +21,6 @@ export interface IProduct{
 
 export interface ICard {
     key?: number,
-    id: number,
-    title: string,
-    price: number,
-    discountPercentage: number,
-    rating: number,
-    stock: number,
-    brand: string,
-    category: string,
-    thumbnail: string,
+    objProduct: IProduct,
     widthCard?:number,
   }
