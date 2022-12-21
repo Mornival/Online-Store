@@ -16,12 +16,14 @@ const MainFilterPositionItems = ({position, products,classPosition}:IProps) =>{
     const maxPositionLength = maxPosition.length;
     const maxSortPositionLength = sortPosition.length;
     const idCheckbox = Math.random();
+
+    const classInputAndLabel = maxSortPositionLength === 0 ? 'zero' : '';
     
     return (
         <div className={`${classPosition}__item`}>
-            <input className='' id={`${idCheckbox}`} type="checkbox" />
-            <label className='' htmlFor={`${idCheckbox}`}>{position}</label>
-            <div className={`${classPosition}__item__count`}>
+            <input className={classInputAndLabel} id={`${idCheckbox}`} type="checkbox" />
+            <label className={classInputAndLabel} htmlFor={`${idCheckbox}`}>{position}</label>
+            <div className={`${classPosition}__item__count ${classInputAndLabel}`}>
                 (<span className='count'>{maxSortPositionLength}</span>/<span className='from'>{maxPositionLength}</span>)
             </div>
         </div>

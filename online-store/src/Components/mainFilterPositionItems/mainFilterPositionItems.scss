@@ -42,6 +42,9 @@
 
     &__count{
         margin-left: auto;
+        &.zero{
+            color: rgb(80, 80, 80);
+        }
     }
 }
 

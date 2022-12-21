@@ -75,9 +75,15 @@ const MainProducts = () => {
 
     }
 
+  
+
     const visibleProducts = () => {
         return searchProducts(sortProducts(products, kindOfSort), searchData);
     }
+
+    useEffect(()=>{
+        setDataSort(dataSort=>[...visibleProducts()]);
+    });
 
 
     return (
