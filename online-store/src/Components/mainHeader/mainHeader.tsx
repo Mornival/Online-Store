@@ -1,9 +1,16 @@
 import './mainHeader.scss';
 import cartImage from './cart.png';
 import logoImage from './packet.svg';
+import { useContext } from 'react';
+import ContextProducts from '../context/contextProducts';
+import { ICard } from '../../types/types';
 
-const MainHeader = ({countCart}:{countCart:number}) => {
-    return (
+const MainHeader = () => {
+    const {dataCart} = useContext(ContextProducts);
+    const sumCartTotal = dataCart.reduce(
+        (accumulator:number, currentValue:ICard) => accumulator + currentValue.price,
+        0
+      );    return (
         <header className='header'>
             <div className="container">
                 <div className='header__logo'>
@@ -11,11 +18,11 @@ const MainHeader = ({countCart}:{countCart:number}) => {
                     <a href="#"><h1>Online-Store</h1></a>
                 </div>
                 <div className='header__total-cart'>
-                    Cart total: <span>$0</span>
+                    Cart total: <span>{`$${sumCartTotal}.00`}</span>
                 </div>
                 <div className='header__cart'>
                     <img src={cartImage} alt="packet" />
-                    <div className='header__cart__count'>{countCart}</div>
+                    <div className='header__cart__count'>{dataCart.length}</div>
                 </div>
             </div>
         </header>

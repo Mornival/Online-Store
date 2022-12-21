@@ -1,29 +1,34 @@
-import {useState, useEffect} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import './mainProductsItem.scss';
+import ContextProducts from '../context/contextProducts';
+import { ICard } from '../../types/types';
 
-interface ICard {
-    key?: number,
-    title: string,
-    price: number,
-    discountPercentage: number,
-    rating: number,
-    stock: number,
-    brand: string,
-    category: string,
-    thumbnail: string,
-    widthCard:number,
-    updateCountCart:(added:boolean)=>void
-}
 
-const MainProductsItem = ({ title, price, discountPercentage, rating, stock, brand, category, thumbnail, widthCard, updateCountCart }: ICard) => {
+const MainProductsItem = ({ id, title, price, discountPercentage, rating, stock, brand, category, thumbnail, widthCard }: ICard) => {
    const [buttonState, setButtonState] = useState(true);
    const boxShadow = buttonState ? 'none' : '0 0 25px wheat';
-   
+   const {dataCart, setDataCart} = useContext(ContextProducts);
 
    function onAddCart() {
-        setButtonState(buttonState => !buttonState);
-        updateCountCart(buttonState);
+        if(buttonState) {
+            setDataCart([...dataCart,{id, title, price, discountPercentage, rating, stock, brand, category, thumbnail}]);
+        } else {
+            dataCart.find((item:ICard) => {
+                if(item.id === id) {
+                    setDataCart(dataCart.filter((item:ICard)=> item.id !== id));
+                }
+            })
+        }
+        setButtonState(buttonState => !buttonState);         
    }
+
+    useEffect(() => {
+        dataCart.find((item:ICard) => {
+            if (item.id === id) {
+                setButtonState(false);
+            }
+        })
+    })
 
     return (
         <div style={{

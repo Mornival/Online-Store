@@ -6,7 +6,7 @@ import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
 
-const MainProducts = ({updateCountCart}:{updateCountCart: (added:boolean)=>void}) => {
+const MainProducts = () => {
     const {products} = dataProducts;
     const [widthCard, setWidthCard] = useState(350);
     const [searchData, setSearchData] = useState('');
@@ -106,6 +106,7 @@ const MainProducts = ({updateCountCart}:{updateCountCart: (added:boolean)=>void}
                 {visibleProducts().length ?
                     visibleProducts().map(item => (
                         <MainProductsItem key={item.id}
+                            id={item.id}
                             title={item.title}
                             price={item.price}
                             discountPercentage={item.discountPercentage}
@@ -114,8 +115,7 @@ const MainProducts = ({updateCountCart}:{updateCountCart: (added:boolean)=>void}
                             brand={item.brand}
                             category={item.category}
                             thumbnail={item.thumbnail}
-                            widthCard={widthCard}
-                            updateCountCart={(added:boolean):void=>updateCountCart(added)}/>
+                            widthCard={widthCard}/>
                     )) :
                     <div className='not-found'>No products found...	&#9785;</div>
                 }
