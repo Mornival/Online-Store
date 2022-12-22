@@ -1,6 +1,6 @@
 import { IDataProducts } from "../types/types"
 
-export const dataProducts: IDataProducts = {
+export const defaultDataProducts: IDataProducts = {
     products: [
       {
         id: 1,

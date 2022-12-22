@@ -1,21 +1,21 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
-import {useCallback, useEffect, useState} from 'react';
-import { dataProducts } from '../../data/data';
+import { useEffect, useState} from 'react';
+import { defaultDataProducts } from '../../data/data';
 import {IProduct} from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
 import {useContext} from 'react';
-import ContextSorts from '../context/contextSort';
+import contextProducts from '../context/contextProducts';
 
 
 const MainProducts = () => {
-    const {products} = dataProducts;
+    const {products} = defaultDataProducts;
     const [widthCard, setWidthCard] = useState(350);
     const [searchData, setSearchData] = useState('');
     const [kindOfSort, setKindOfSort] = useState('price-ASC');
     
-    const {dataSort, setDataSort} = useContext(ContextSorts);
+    const {setDataProducts} = useContext(contextProducts);
 
     function changeSize(size:number):void {
         setWidthCard(size);
@@ -45,7 +45,7 @@ const MainProducts = () => {
     useEffect(()=>{
         const smallButton = document.querySelector('.small') as HTMLElement;
         const bigButton = document.querySelector('.big') as HTMLElement;
-        widthCard === 260 ? smallButton.className = 'small active' : smallButton.className = 'small'; 
+        widthCard === 210 ? smallButton.className = 'small active' : smallButton.className = 'small'; 
         widthCard === 350 ? bigButton.className = 'big active' : bigButton.className = 'big'; 
     });
 
@@ -72,17 +72,15 @@ const MainProducts = () => {
                 default:
                 return res;
         }
-
     }
 
-  
 
     const visibleProducts = () => {
         return searchProducts(sortProducts(products, kindOfSort), searchData);
     }
 
     useEffect(()=>{
-       setDataSort(dataSort => visibleProducts());
+       setDataProducts(dataProducts => visibleProducts());
     },[searchData]);
 
     return (
@@ -98,13 +96,13 @@ const MainProducts = () => {
                     <option value="discount-DESC">Sort by discount DESC</option>
                 </select>
                 <div className="products__header__found">
-                    Found: <span>{searchProducts(products,searchData).length}</span>
+                    Found: <span>{visibleProducts().length}</span>
                 </div>
                 <div className='products__header__search'>
                     <input onChange={onUpdateSearch} placeholder='Search product' type="text" />
                 </div>
                 <div className="products__header__buttons">
-                    <button onClick={()=>changeSize(260)} className='small'>
+                    <button onClick={()=>changeSize(210)} className='small'>
                         <img src={smallMenu} alt="small-menu" />
                     </button>
                     <button onClick={()=>changeSize(350)}  className="big">
@@ -117,15 +115,6 @@ const MainProducts = () => {
                     visibleProducts().map(item => (
                         <MainProductsItem key={item.id}
                             objProduct={item}
-                            // id={item.id}
-                            // title={item.title}
-                            // price={item.price}
-                            // discountPercentage={item.discountPercentage}
-                            // rating={item.rating}
-                            // stock={item.stock}
-                            // brand={item.brand}
-                            // category={item.category}
-                            // thumbnail={item.thumbnail}
                             widthCard={widthCard}/>
                     )) :
                     <div className='not-found'>No products found...	&#9785;</div>

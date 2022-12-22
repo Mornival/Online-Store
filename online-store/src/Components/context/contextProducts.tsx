@@ -1,16 +1,19 @@
-import React, { createContext } from "react";
-import { ICard } from "../../types/types";
+import React, { createContext} from "react";
+import { IProduct } from "../../types/types";
+import { defaultDataProducts } from "../../data/data";
+
+const {products} = defaultDataProducts;
 
 interface IContextProducts {
-    dataCart: ICard[],
-    setDataCart: React.Dispatch<React.SetStateAction<ICard[]>>
+    dataProducts: IProduct[],
+    setDataProducts: React.Dispatch<React.SetStateAction<IProduct[]>>
 }
 
 const defaultStateProducts: IContextProducts = {
-    dataCart: [],
-    setDataCart: ()=>{}
+    dataProducts: products,
+    setDataProducts: ()=>{}
 }
 
-const ContextProducts = createContext<IContextProducts>(defaultStateProducts);
+const contextProducts = createContext<IContextProducts>(defaultStateProducts);
 
-export default ContextProducts;
+export default contextProducts;

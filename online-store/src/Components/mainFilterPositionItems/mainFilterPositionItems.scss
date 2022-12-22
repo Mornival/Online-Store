@@ -11,20 +11,17 @@
             transform: scale(1.05);
             box-shadow: 0 0 7px #fff;
         }
+        &:checked{
+            width: 17px;
+            height: 17px;
+        }
         &:checked + label{
             transform: scale(1.05);
             font-weight: bold;
         }
-    }
-
-    .zero {
-        &:hover{
-            transform: scale(1);
-            box-shadow: none
-        }
-        &:checked + label{
-            transform: scale(1);
-            font-weight: normal;
+        &.zero{
+            width: 13px;
+            height: 13px;
         }
     }
 
@@ -34,16 +31,26 @@
         &:hover{
             transform: scale(1.05);
         }
+        &.zero{
+            color: rgb(80, 80, 80);
+            &:hover{
+                transform: scale(1);
+                box-shadow: none
+            }
+
+        }
     }
     span{
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-left: 4px;
+        margin-right: 4px;
     }
 
     &__count{
         margin-left: auto;
+        font-weight: bold;
         &.zero{
             color: rgb(80, 80, 80);
+            font-weight: normal;
         }
     }
 }

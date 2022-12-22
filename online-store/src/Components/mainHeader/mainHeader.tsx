@@ -2,11 +2,11 @@ import './mainHeader.scss';
 import cartImage from './cart.png';
 import logoImage from './packet.svg';
 import { useContext} from 'react';
-import ContextProducts from '../context/contextProducts';
+import ContextCart from '../context/contextCart';
 import { ICard } from '../../types/types';
 
 const MainHeader = () => {
-    const {dataCart} = useContext(ContextProducts);
+    const {dataCart} = useContext(ContextCart);
     const sumCartTotal = dataCart.reduce(
         (accumulator: number, {objProduct}: ICard) => accumulator + objProduct.price,
         0

@@ -1,11 +1,11 @@
-import {dataProducts} from '../../data/data';
+import {defaultDataProducts} from '../../data/data';
 import MainFilterPositionItems from '../mainFilterPositionItems/mainFilterPositionItems';
 import './mainFilterPosition.scss';
 import { IProduct } from '../../types/types';
 
 
 const MainFilterPosition = ({classPosition}:{classPosition:string}) => {
-    const {products} = dataProducts;
+    const {products} = defaultDataProducts;
     const positionUnique:Set<string|number|string[]> = new Set(products.map(item => item[classPosition as keyof IProduct]));
     const position:(string|number|string[])[] = Array.from(positionUnique);
     const title = classPosition.charAt(0).toUpperCase() + classPosition.slice(1);

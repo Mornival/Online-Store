@@ -1,14 +1,17 @@
 import {useState, useContext, useEffect} from 'react';
 import './mainProductsItem.scss';
-import ContextProducts from '../context/contextProducts';
+import ContextCart from '../context/contextCart';
 import { ICard } from '../../types/types';
 
 
 const MainProductsItem = ({objProduct, widthCard }: ICard) => {
     const [buttonState, setButtonState] = useState(true);
     const boxShadow = buttonState ? 'none' : '0 0 25px wheat';
-    const { dataCart, setDataCart } = useContext(ContextProducts);
+    const { dataCart, setDataCart } = useContext(ContextCart);
     const {id,title,price, discountPercentage,category, brand, rating, stock, thumbnail} = objProduct;
+
+    const textButtonAdd = widthCard === 210 ? 'ADD TO' : 'ADD TO CART';
+    const textButtonDrop = widthCard === 210 ? 'DROP' : 'DROP FROM CART';
 
     function onAddCart() {
         if (buttonState) {
@@ -47,7 +50,7 @@ const MainProductsItem = ({objProduct, widthCard }: ICard) => {
                 <div>Stock:  <span>{stock}</span></div>
             </div>
             <div className="card__buttons">
-                <button onClick={()=>onAddCart()}>{buttonState ? 'ADD TO CART' : 'DROP FROM CART'}</button>
+                <button onClick={()=>onAddCart()}>{buttonState ?  textButtonAdd : textButtonDrop }</button>
                 <button>DETAILS</button>
             </div>
         </div>
