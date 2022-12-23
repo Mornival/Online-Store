@@ -12,6 +12,12 @@ import './App.scss';
 
 import ContextCart from './Components/context/contextCart';
 import contextProducts from './Components/context/contextProducts';
+import ContextFilter from './Components/context/contextFilter';
+
+interface IDataFilter {
+  dataCategory: (string|undefined)[],
+  dataBrand: (string|undefined)[],
+}
 
 function App() {
   const { products } = defaultDataProducts;
@@ -23,7 +29,7 @@ function App() {
 
   const [dataCart, setDataCart] = useState<ICard[]>([]);
   const [dataProducts, setDataProducts] = useState<IProduct[]>([...products]);
-  const [dataCategory, setDataCategory] = useState<(product:IProduct[])=>IProduct[]>(products=>products);
+  const [dataFilter, setDataFilter] = useState<IDataFilter>({dataCategory:[], dataBrand: []});
 
   return (
     <ContextCart.Provider value={{
@@ -34,7 +40,11 @@ function App() {
         dataProducts,
         setDataProducts
       }}>
-          <MainHeader />
+        <ContextFilter.Provider value={{
+          dataFilter,
+          setDataFilter
+        }}>
+        <MainHeader />
           <MainContent>
             <MainFilters>
               <MainFilterPosition classPosition={'category'} />
@@ -49,6 +59,7 @@ function App() {
             <MainProducts />
           </MainContent>
           <MainFooter />
+        </ContextFilter.Provider>
       </contextProducts.Provider>
     </ContextCart.Provider>
   );

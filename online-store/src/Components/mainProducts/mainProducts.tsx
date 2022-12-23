@@ -7,7 +7,7 @@ import bigMenu from './small.svg';
 import smallMenu from './big.svg';
 import {useContext} from 'react';
 import contextProducts from '../context/contextProducts';
-
+import ContextFilter from '../context/contextFilter';
 
 const MainProducts = () => {
     const {products} = defaultDataProducts;
@@ -16,6 +16,8 @@ const MainProducts = () => {
     const [kindOfSort, setKindOfSort] = useState('price-ASC');
     
     const {setDataProducts} = useContext(contextProducts);
+    const {dataFilter} = useContext(ContextFilter);
+    const {dataBrand, dataCategory} = dataFilter;
 
     function changeSize(size:number):void {
         setWidthCard(size);
@@ -40,6 +42,35 @@ const MainProducts = () => {
     function onUpdateSearch(e:React.ChangeEvent<HTMLInputElement>):void{
         const searchValue = (e.target as HTMLInputElement).value;
         setSearchData(searchValue);
+    }
+
+    function onUpdateCategory(products:IProduct[],checkedInputs:(string|undefined)[]){
+        if( checkedInputs.length === 0){
+            return products;
+        }
+        const filteredArr: IProduct[] = [];
+        for (let filter of checkedInputs) {
+            products.forEach(item => {
+                if (item.category === filter) {
+                    filteredArr.push(item);
+                }
+            })
+        }
+        return filteredArr;
+    }
+    function onUpdateBrand(products:IProduct[],checkedInputs:(string|undefined)[]){
+        if( checkedInputs.length === 0){
+            return products;
+        }
+        const filteredArr: IProduct[] = [];
+        for (let filter of checkedInputs) {
+            products.forEach(item => {
+                if (item.brand === filter) {
+                    filteredArr.push(item);
+                }
+            })
+        }
+        return filteredArr;
     }
 
     useEffect(()=>{
@@ -76,12 +107,12 @@ const MainProducts = () => {
 
 
     const visibleProducts = () => {
-        return searchProducts(sortProducts(products, kindOfSort), searchData);
+        return onUpdateCategory(onUpdateBrand(searchProducts(sortProducts(products, kindOfSort), searchData),dataBrand),dataCategory);
     }
 
     useEffect(()=>{
        setDataProducts(dataProducts => visibleProducts());
-    },[searchData]);
+    },[searchData,dataFilter]);
 
     return (
         <div className="products">
