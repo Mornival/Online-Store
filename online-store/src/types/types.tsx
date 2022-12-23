@@ -5,7 +5,7 @@ export interface IDataProducts {
     limit: number
 }
 
-export interface IProduct{
+export interface IProduct {
     id: number,
     title: string,
     description: string,
@@ -22,5 +22,10 @@ export interface IProduct{
 export interface ICard {
     key?: number,
     objProduct: IProduct,
-    widthCard?:number,
-  }
+    widthCard?: number,
+}
+
+export interface IDataFilter {
+    dataCategory: (string | undefined)[],
+    dataBrand: (string | undefined)[],
+}

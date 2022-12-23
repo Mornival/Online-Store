@@ -7,29 +7,24 @@ import MainFilterPosition from './Components/mainFilterPosition/mainFilterPositi
 import MainProducts from './Components/mainProducts/mainProducts';
 import MainFooter from './Components/mainFooter/mainFooter';
 import { defaultDataProducts } from './data/data';
-import { ICard, IProduct } from './types/types';
+import { ICard, IProduct, IDataFilter } from './types/types';
 import './App.scss';
 
 import ContextCart from './Components/context/contextCart';
 import contextProducts from './Components/context/contextProducts';
 import ContextFilter from './Components/context/contextFilter';
 
-interface IDataFilter {
-  dataCategory: (string|undefined)[],
-  dataBrand: (string|undefined)[],
-}
-
 function App() {
   const { products } = defaultDataProducts;
-  const prices: number[] = products.map(item => item.price);
-  const stocks: number[] = products.map(item => item.stock);
-
-  const [minPrice, maxPrice]: number[] = [Math.min(...prices), Math.max(...prices)];
-  const [minStock, maxStock]: number[] = [Math.min(...stocks), Math.max(...stocks)];
-
   const [dataCart, setDataCart] = useState<ICard[]>([]);
   const [dataProducts, setDataProducts] = useState<IProduct[]>([...products]);
   const [dataFilter, setDataFilter] = useState<IDataFilter>({dataCategory:[], dataBrand: []});
+
+  const prices: number[] = dataProducts.map(item => item.price);
+  const stocks: number[] = dataProducts.map(item => item.stock);
+
+  const [minPrice, maxPrice]: number[] = prices.length ? [Math.min(...prices), Math.max(...prices)]:[0,0];
+  const [minStock, maxStock]: number[] = stocks.length ? [Math.min(...stocks), Math.max(...stocks)]:[0,0];
 
   return (
     <ContextCart.Provider value={{
