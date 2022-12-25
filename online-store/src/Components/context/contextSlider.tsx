@@ -17,7 +17,7 @@ interface IContextSlider {
     setDataSlider: React.Dispatch<React.SetStateAction<IDataSlider>>
 }
 
-const defaultStateSlider: IContextSlider = {
+export const defaultStateSlider: IContextSlider = {
     dataSlider: {
         minPrice: 10,
         maxPrice: 1749,

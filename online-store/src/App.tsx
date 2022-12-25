@@ -14,57 +14,73 @@ import ContextCart from './Components/context/contextCart';
 import contextProducts from './Components/context/contextProducts';
 import ContextFilter from './Components/context/contextFilter';
 import ContextSlider from './Components/context/contextSlider';
+import ContextSearchPanel from './Components/context/contextSearchPanel';
+import ContextSort from './Components/context/contextSort';
 
 function App() {
   const { products } = defaultDataProducts;
   const [dataCart, setDataCart] = useState<ICard[]>([]);
   const [dataProducts, setDataProducts] = useState<IProduct[]>([...products]);
-  const [dataFilter, setDataFilter] = useState<IDataFilter>({dataCategory:[], dataBrand: []});
-  const [dataSlider,setDataSlider] = useState<IDataSlider>({
+  const [dataFilter, setDataFilter] = useState<IDataFilter>({ dataCategory: [], dataBrand: [] });
+  const [dataSlider, setDataSlider] = useState<IDataSlider>({
     minPrice: 10,
     maxPrice: 1749,
     minStock: 2,
     maxStock: 150
   });
+  const [dataSearchPanel, setDataSearchPanel] = useState<string>('');
+  const [dataSort, setDataSort] = useState<string>('price-ASC');
 
   const prices: number[] = dataProducts.map(item => item.price);
   const stocks: number[] = dataProducts.map(item => item.stock);
 
-  const [minPrice, maxPrice]: number[] = prices.length ? [Math.min(...prices), Math.max(...prices)]:[0,0];
-  const [minStock, maxStock]: number[] = stocks.length ? [Math.min(...stocks), Math.max(...stocks)]:[0,0];
+  const [minPrice, maxPrice]: number[] = prices.length ? [Math.min(...prices), Math.max(...prices)] : [0, 0];
+  const [minStock, maxStock]: number[] = stocks.length ? [Math.min(...stocks), Math.max(...stocks)] : [0, 0];
 
   return (
-    <ContextCart.Provider value={{
+    <ContextCart.Provider value={{ // context cart
       dataCart,
       setDataCart
     }}>
-      <contextProducts.Provider value={{
+      <contextProducts.Provider value={{ // context filtered goods
         dataProducts,
         setDataProducts
       }}>
-        <ContextFilter.Provider value={{
+        <ContextFilter.Provider value={{ // context filter by category and brand
           dataFilter,
           setDataFilter
         }}>
-          <ContextSlider.Provider value={{
+          <ContextSlider.Provider value={{ // context filter by price and stock
             dataSlider,
             setDataSlider
           }}>
-            <MainHeader />
-            <MainContent>
-              <MainFilters>
-                <MainFilterPosition classPosition={'category'} />
-                <MainFilterPosition classPosition={'brand'} />
-                <MainFilterDualSlider title={'Price'}
-                  minValue={minPrice}
-                  maxValue={maxPrice} />
-                <MainFilterDualSlider title={'Stock'}
-                  minValue={minStock}
-                  maxValue={maxStock} />
-              </MainFilters>
-              <MainProducts />
-            </MainContent>
-            <MainFooter />
+            <ContextSearchPanel.Provider value={{ // context search panel
+              dataSearchPanel,
+              setDataSearchPanel
+            }}>
+              <ContextSort.Provider value={{ // context sort bt price, rating, discount
+                dataSort,
+                setDataSort
+              }}>
+
+                <MainHeader />
+                <MainContent>
+                  <MainFilters>
+                    <MainFilterPosition classPosition={'category'} />
+                    <MainFilterPosition classPosition={'brand'} />
+                    <MainFilterDualSlider title={'Price'}
+                      minValue={minPrice}
+                      maxValue={maxPrice} />
+                    <MainFilterDualSlider title={'Stock'}
+                      minValue={minStock}
+                      maxValue={maxStock} />
+                  </MainFilters>
+                  <MainProducts />
+                </MainContent>
+                <MainFooter />
+
+              </ContextSort.Provider>
+            </ContextSearchPanel.Provider>
           </ContextSlider.Provider>
         </ContextFilter.Provider>
       </contextProducts.Provider>

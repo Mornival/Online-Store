@@ -9,17 +9,18 @@ import {useContext} from 'react';
 import contextProducts from '../context/contextProducts';
 import ContextFilter from '../context/contextFilter';
 import ContextSlider from '../context/contextSlider';
+import ContextSearchPanel from '../context/contextSearchPanel';
+import ContextSort from '../context/contextSort';
 
 const MainProducts = () => {
     const {products} = defaultDataProducts;
     const [widthCard, setWidthCard] = useState(350);
-    const [searchData, setSearchData] = useState('');
-    const [kindOfSort, setKindOfSort] = useState('price-ASC');
-    
     const {setDataProducts} = useContext(contextProducts);
     const {dataFilter} = useContext(ContextFilter);
     const {dataBrand, dataCategory} = dataFilter;
     const {dataSlider} = useContext(ContextSlider);
+    const {dataSearchPanel, setDataSearchPanel} = useContext(ContextSearchPanel);
+    const {dataSort, setDataSort} = useContext(ContextSort);
 
     function changeSize(size:number):void {
         setWidthCard(size);
@@ -43,7 +44,7 @@ const MainProducts = () => {
 
     function onUpdateSearch(e:React.ChangeEvent<HTMLInputElement>):void{
         const searchValue = (e.target as HTMLInputElement).value;
-        setSearchData(searchValue);
+        setDataSearchPanel(searchValue);
     }
 
     function updateCategory(products:IProduct[],checkedInputs:(string|undefined)[]):IProduct[]{
@@ -93,7 +94,7 @@ const MainProducts = () => {
 
     function onUpdateSort(e:React.ChangeEvent<HTMLSelectElement> ) {
         const whatSort:string = e.target.value;
-        setKindOfSort(whatSort);
+        setDataSort(whatSort);
     }
 
     function sortProducts (products:IProduct[], kindOfSort:string):IProduct[] {
@@ -117,19 +118,18 @@ const MainProducts = () => {
     }
 
     const visibleProducts = () => {
-        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, kindOfSort), searchData),dataBrand),dataCategory),dataSlider),dataSlider);
+        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, dataSort), dataSearchPanel),dataBrand),dataCategory),dataSlider),dataSlider);
     }
 
     useEffect(()=>{
        setDataProducts(dataProducts => visibleProducts());
-    },[searchData,dataFilter,dataSlider]);
+    },[dataSearchPanel,dataFilter,dataSlider]);
 
     return (
         <div className="products">
             <div className="products__header">
                 <select onChange={onUpdateSort} className='products__header__select' name="sorts" id="sorts-select">
-                    <option value="" disabled>Sort options: </option>
-                    <option value="price-ASC">Sort by price ASC</option>
+                    <option className='default-select' value="price-ASC">Sort by price ASC</option>
                     <option value="prise-DESC">Sort by price DESC</option>
                     <option value="rating-ASC">Sort by rating ASC</option>
                     <option value="rating-DESC">Sort by rating DESC</option>

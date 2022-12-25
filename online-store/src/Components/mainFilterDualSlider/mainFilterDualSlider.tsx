@@ -22,6 +22,8 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
 
 
     function onUpdateSliderValue(e: React.ChangeEvent<HTMLInputElement>) {
+        e.preventDefault();
+        e.stopPropagation();
         const classTarget = e.target.className;
         const index: number = +e.target.value;
         const [element]:IProduct[] = createAscArray().filter(item => item.id === index);
@@ -34,8 +36,9 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
                 setMinSliderValue(prev=>index);
             }
             if (maxSliderValue === +e.target.value) {
+                setMinSlider(prev=>element[pos as keyof IProduct]);
                 (e.target.nextElementSibling as HTMLInputElement).style.zIndex = '0';
-                (e.target as HTMLInputElement).style.zIndex = '1'; 
+                (e.target as HTMLInputElement).style.zIndex = '1';
             }
         } else {
             if (+e.target.value - minSliderValue <= minGap) {
@@ -45,8 +48,9 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
                 setMaxSliderValue(prev=>index);  
             }
             if (minSliderValue === +e.target.value) {
+                setMaxSliderValue(prev=>minSliderValue + minGap);
                 (e.target.previousElementSibling as HTMLInputElement).style.zIndex = '0';
-                (e.target as HTMLInputElement).style.zIndex = '1'; 
+                (e.target as HTMLInputElement).style.zIndex = '1';
             }
         }
 
@@ -99,8 +103,8 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
             setMinSliderValue(1);
             setMaxSliderValue(100);
         } else {
-            setMinSliderValue(minEl[minEl.length - 1].id);
-            setMaxSliderValue(maxEl[maxEl.length - 1].id);
+            setMinSliderValue(minEl[maxEl.length - 1]?.id);
+            setMaxSliderValue(maxEl[maxEl.length - 1]?.id);
         }
     },[minValue, maxValue]);
 
@@ -114,9 +118,12 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
                 <div className='not-found'>
                     Not found... &#9785;
                 </div> :
-                <div className="slider__items">
-                    <div className={`slider__items__from`}>{pos==='price'?`$${minSlider}.00`:minSlider}</div>
-                    <div>&harr;</div>
+                <div className="slider__items"
+                     style={{'justifyContent': minSlider===maxSlider ? 'center' : 'space-between'}}>
+                    <div className={`slider__items__from`}
+                         style={{'display': minSlider===maxSlider ? 'none' : 'block'}}
+                         >{pos==='price'?`$${minSlider}.00`:minSlider}</div>
+                    <div style={{'display': minSlider===maxSlider ? 'none' : 'block'}} >&harr;</div>
                     <div className={`slider__items__to`}>{pos==='price'?`$${maxSlider}.00`:maxSlider}</div>
                 </div>
             }

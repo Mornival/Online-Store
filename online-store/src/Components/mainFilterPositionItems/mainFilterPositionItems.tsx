@@ -31,8 +31,6 @@ const MainFilterPositionItems = ({position, products,classPosition,onUpdateFilte
       onUpdateFilterBrand();
     }
 
-
-
     return (
         <div className={`${classPosition}__item`}>
             <input onInput={classPosition==='category'?onFilterCategory:onFilterBrand} className={classLabel} id={`${idCheckbox}`} type="checkbox" />

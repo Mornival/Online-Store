@@ -6,6 +6,19 @@
 
 body{
     background-color: lightgrey;
+    &::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: lightgrey;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: black;
+        border: 1px solid lightgrey;
+    }
 }
 
 .container{

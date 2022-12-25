@@ -13,7 +13,7 @@ interface IContextFilter {
     setDataFilter: React.Dispatch<React.SetStateAction<IDataFilter>>
 }
 
-const defaultStateFilter: IContextFilter = {
+export const defaultStateFilter: IContextFilter = {
     dataFilter: {
         dataCategory: [],
         dataBrand: [],
