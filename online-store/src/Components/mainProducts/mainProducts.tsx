@@ -1,13 +1,14 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
 import { useEffect, useState} from 'react';
 import { defaultDataProducts } from '../../data/data';
-import {IProduct} from '../../types/types';
+import {IProduct, IDataSlider} from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
 import {useContext} from 'react';
 import contextProducts from '../context/contextProducts';
 import ContextFilter from '../context/contextFilter';
+import ContextSlider from '../context/contextSlider';
 
 const MainProducts = () => {
     const {products} = defaultDataProducts;
@@ -18,6 +19,7 @@ const MainProducts = () => {
     const {setDataProducts} = useContext(contextProducts);
     const {dataFilter} = useContext(ContextFilter);
     const {dataBrand, dataCategory} = dataFilter;
+    const {dataSlider} = useContext(ContextSlider);
 
     function changeSize(size:number):void {
         setWidthCard(size);
@@ -44,7 +46,7 @@ const MainProducts = () => {
         setSearchData(searchValue);
     }
 
-    function onUpdateCategory(products:IProduct[],checkedInputs:(string|undefined)[]){
+    function updateCategory(products:IProduct[],checkedInputs:(string|undefined)[]):IProduct[]{
         if( checkedInputs.length === 0){
             return products;
         }
@@ -58,7 +60,7 @@ const MainProducts = () => {
         }
         return filteredArr;
     }
-    function onUpdateBrand(products:IProduct[],checkedInputs:(string|undefined)[]){
+    function updateBrand(products:IProduct[],checkedInputs:(string|undefined)[]):IProduct[]{
         if( checkedInputs.length === 0){
             return products;
         }
@@ -71,6 +73,15 @@ const MainProducts = () => {
             })
         }
         return filteredArr;
+    }
+
+    function updatePrice(products:IProduct[], state:IDataSlider):IProduct[] {
+        const {minPrice, maxPrice} = state;
+        return products.filter(item=>item.price>=minPrice && item.price<=maxPrice)
+    }
+    function updateStock(products:IProduct[], state:IDataSlider):IProduct[] {
+        const {minStock, maxStock} = state;
+        return products.filter(item=>item.stock>=minStock && item.stock<=maxStock)
     }
 
     useEffect(()=>{
@@ -105,14 +116,13 @@ const MainProducts = () => {
         }
     }
 
-
     const visibleProducts = () => {
-        return onUpdateCategory(onUpdateBrand(searchProducts(sortProducts(products, kindOfSort), searchData),dataBrand),dataCategory);
+        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, kindOfSort), searchData),dataBrand),dataCategory),dataSlider),dataSlider);
     }
 
     useEffect(()=>{
        setDataProducts(dataProducts => visibleProducts());
-    },[searchData,dataFilter]);
+    },[searchData,dataFilter,dataSlider]);
 
     return (
         <div className="products">

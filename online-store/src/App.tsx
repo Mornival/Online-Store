@@ -7,18 +7,25 @@ import MainFilterPosition from './Components/mainFilterPosition/mainFilterPositi
 import MainProducts from './Components/mainProducts/mainProducts';
 import MainFooter from './Components/mainFooter/mainFooter';
 import { defaultDataProducts } from './data/data';
-import { ICard, IProduct, IDataFilter } from './types/types';
+import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
 import './App.scss';
 
 import ContextCart from './Components/context/contextCart';
 import contextProducts from './Components/context/contextProducts';
 import ContextFilter from './Components/context/contextFilter';
+import ContextSlider from './Components/context/contextSlider';
 
 function App() {
   const { products } = defaultDataProducts;
   const [dataCart, setDataCart] = useState<ICard[]>([]);
   const [dataProducts, setDataProducts] = useState<IProduct[]>([...products]);
   const [dataFilter, setDataFilter] = useState<IDataFilter>({dataCategory:[], dataBrand: []});
+  const [dataSlider,setDataSlider] = useState<IDataSlider>({
+    minPrice: 10,
+    maxPrice: 1749,
+    minStock: 2,
+    maxStock: 150
+  });
 
   const prices: number[] = dataProducts.map(item => item.price);
   const stocks: number[] = dataProducts.map(item => item.stock);
@@ -39,21 +46,26 @@ function App() {
           dataFilter,
           setDataFilter
         }}>
-        <MainHeader />
-          <MainContent>
-            <MainFilters>
-              <MainFilterPosition classPosition={'category'} />
-              <MainFilterPosition classPosition={'brand'} />
-              <MainFilterDualSlider title={'Price'}
-                minValue={minPrice}
-                maxValue={maxPrice} />
-              <MainFilterDualSlider title={'Stock'}
-                minValue={minStock}
-                maxValue={maxStock} />
-            </MainFilters>
-            <MainProducts />
-          </MainContent>
-          <MainFooter />
+          <ContextSlider.Provider value={{
+            dataSlider,
+            setDataSlider
+          }}>
+            <MainHeader />
+            <MainContent>
+              <MainFilters>
+                <MainFilterPosition classPosition={'category'} />
+                <MainFilterPosition classPosition={'brand'} />
+                <MainFilterDualSlider title={'Price'}
+                  minValue={minPrice}
+                  maxValue={maxPrice} />
+                <MainFilterDualSlider title={'Stock'}
+                  minValue={minStock}
+                  maxValue={maxStock} />
+              </MainFilters>
+              <MainProducts />
+            </MainContent>
+            <MainFooter />
+          </ContextSlider.Provider>
         </ContextFilter.Provider>
       </contextProducts.Provider>
     </ContextCart.Provider>

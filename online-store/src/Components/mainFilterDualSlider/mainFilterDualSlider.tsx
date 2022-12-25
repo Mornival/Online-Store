@@ -1,6 +1,7 @@
-import { useState,useEffect } from 'react';
+import { useState,useEffect, useContext} from 'react';
 import { IProduct } from '../../types/types';
 import { defaultDataProducts } from '../../data/data';
+import ContextSlider from '../context/contextSlider';
 import './mainFilterDualSlider.scss';
 
 interface ISlider {
@@ -10,46 +11,126 @@ interface ISlider {
 }
 
 const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
+    const minGap = 0;
     const { products } = defaultDataProducts;
-    const [minSlider, setMinSlider] = useState(minValue);
-    let minValueChange = title === 'Price' ? `$${minValue}.00` : minValue;
-    let maxValueChange = title === 'Price' ? `$${maxValue}.00` : maxValue;
+    const pos:string|number|string[] = title.toLowerCase();
+    const [minSlider, setMinSlider] = useState<string|number|string[]>(minValue);
+    const [maxSlider, setMaxSlider] = useState<string|number|string[]>(maxValue);
+    const [minSliderValue, setMinSliderValue] = useState(1);
+    const [maxSliderValue, setMaxSliderValue] = useState(100);
+    const {dataSlider,setDataSlider} = useContext(ContextSlider);
 
-    const sliderFromInputs = document.querySelectorAll('.fromSlider') as NodeListOf<HTMLInputElement>;
-    const sliderToInputs = document.querySelectorAll('.toSlider') as NodeListOf<HTMLInputElement>;
-    sliderFromInputs.forEach(item => { item.value = '0'; })
-    sliderToInputs.forEach(item => { item.value = '100'; })
 
-    function onUpdateSlider(e: React.ChangeEvent<HTMLInputElement>) {
+    function onUpdateSliderValue(e: React.ChangeEvent<HTMLInputElement>) {
+        const classTarget = e.target.className;
         const index: number = +e.target.value;
-        const [element] = createAscArray().filter(item => item.id === index);
+        const [element]:IProduct[] = createAscArray().filter(item => item.id === index);
+
+        if (classTarget === 'fromSlider'){
+            if (maxSliderValue - +e.target.value <= minGap) {
+                setMinSliderValue(prev=>maxSliderValue - minGap);
+            } else{
+                setMinSlider(prev=>element[pos as keyof IProduct]);
+                setMinSliderValue(prev=>index);
+            }
+            if (maxSliderValue === +e.target.value) {
+                (e.target.nextElementSibling as HTMLInputElement).style.zIndex = '0';
+                (e.target as HTMLInputElement).style.zIndex = '1'; 
+            }
+        } else {
+            if (+e.target.value - minSliderValue <= minGap) {
+                setMaxSliderValue(prev=>minSliderValue + minGap);
+            } else {
+                setMaxSlider(prev=>element[pos as keyof IProduct]);
+                setMaxSliderValue(prev=>index);  
+            }
+            if (minSliderValue === +e.target.value) {
+                (e.target.previousElementSibling as HTMLInputElement).style.zIndex = '0';
+                (e.target as HTMLInputElement).style.zIndex = '1'; 
+            }
+        }
+
+    }
+
+    function onUpdateSliderFilters(){
+        if (pos === 'price') {
+            setDataSlider({
+                ...dataSlider,
+                minPrice: +minSlider,
+                maxPrice: +maxSlider,
+            });
+        } else {
+            setDataSlider({
+                ...dataSlider,
+                minStock: +minSlider,
+                maxStock: +maxSlider,
+            });
+        }
     }
 
     function createAscArray() {
-        const priceAscArray = products.sort((a, b) => a.price - b.price);
-        priceAscArray.forEach((item, i) => { item.id = i + 1; });
-        return priceAscArray;
+        const cloneProducts = [...products];
+        const ascArray = cloneProducts.sort((a, b) => {
+            const leftEl:string|number|string[] = a[pos as keyof IProduct];
+            const rightEl:string|number|string[] = b[pos as keyof IProduct];
+            return +leftEl - +rightEl;
+        });
+        ascArray.forEach((item, i) => { item.id = i + 1; });
+        return ascArray;
     }
-  
+
+    function fillBetweenInputs(){
+        return {
+            'background' : `linear-gradient(
+                to right, grey ${minSliderValue}%,
+                #fff ${minSliderValue}%,
+                #fff ${maxSliderValue}%,
+                grey ${maxSliderValue}%
+            )`
+        }
+    }
+    
+    useEffect(()=>{
+        setMinSlider(prev=>minValue);
+        setMaxSlider(prev=>maxValue);
+        const minEl = createAscArray().filter(item => item[pos as keyof IProduct] === minValue);
+        const maxEl = createAscArray().filter(item => item[pos as keyof IProduct] === maxValue);
+        if (minEl.length === 0 || maxEl.length === 0) {
+            setMinSliderValue(1);
+            setMaxSliderValue(100);
+        } else {
+            setMinSliderValue(minEl[minEl.length - 1].id);
+            setMaxSliderValue(maxEl[maxEl.length - 1].id);
+        }
+    },[minValue, maxValue]);
+
 
 
     return (
-        <div className='slider'>
+        <div onMouseUp={onUpdateSliderFilters} className='slider'> 
             <h3 className="slider__title">{title}</h3>
             <hr />
-            {maxValueChange === 0 || maxValueChange === '$0.00' ?
+            {minSlider === 0 || maxSlider === 0?
                 <div className='not-found'>
                     Not found... &#9785;
                 </div> :
                 <div className="slider__items">
-                    <div className="slider__items__from">{minValueChange}</div>
+                    <div className={`slider__items__from`}>{pos==='price'?`$${minSlider}.00`:minSlider}</div>
                     <div>&harr;</div>
-                    <div className="slider__items__to">{maxValueChange}</div>
+                    <div className={`slider__items__to`}>{pos==='price'?`$${maxSlider}.00`:maxSlider}</div>
                 </div>
             }
-            <div className={`slider__controls ${title}`}>
-                <input onChange={onUpdateSlider} className="fromSlider" name='from' type="range" min={1} max={100} />
-                <input className="toSlider" name='to' type="range" min={1} max={100} />
+            <div style={fillBetweenInputs()} className={`slider__controls ${pos}`}>
+                <input value={minSliderValue}
+                       onChange={onUpdateSliderValue}
+                       className="fromSlider" 
+                       name='from' type="range" 
+                       min={1} max={100} />
+                <input value={maxSliderValue} 
+                       onChange={onUpdateSliderValue} 
+                       className="toSlider" 
+                       name='to' type="range" 
+                       min={1} max={100} />
             </div>
         </div>
     );

@@ -29,3 +29,10 @@ export interface IDataFilter {
     dataCategory: (string | undefined)[],
     dataBrand: (string | undefined)[],
 }
+
+export interface IDataSlider {
+    minPrice: number,
+    maxPrice: number,
+    minStock: number,
+    maxStock: number
+}
