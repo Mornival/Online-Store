@@ -1,54 +1,77 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { defaultDataProducts } from '../../data/data';
-import {IProduct, IDataSlider} from '../../types/types';
+import { IProduct, IDataSlider } from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
-import {useContext} from 'react';
+import { useContext } from 'react';
 import contextProducts from '../context/contextProducts';
 import ContextFilter from '../context/contextFilter';
 import ContextSlider from '../context/contextSlider';
 import ContextSearchPanel from '../context/contextSearchPanel';
 import ContextSort from '../context/contextSort';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
 const MainProducts = () => {
-    const {products} = defaultDataProducts;
+    const { products } = defaultDataProducts;
     const [widthCard, setWidthCard] = useState(350);
-    const {setDataProducts} = useContext(contextProducts);
-    const {dataFilter} = useContext(ContextFilter);
-    const {dataBrand, dataCategory} = dataFilter;
-    const {dataSlider} = useContext(ContextSlider);
-    const {dataSearchPanel, setDataSearchPanel} = useContext(ContextSearchPanel);
-    const {dataSort, setDataSort} = useContext(ContextSort);
+    const { setDataProducts } = useContext(contextProducts);
+    const { dataFilter, setDataFilter } = useContext(ContextFilter);
+    const { dataBrand, dataCategory } = dataFilter;
+    const { dataSlider } = useContext(ContextSlider);
+    const { dataSearchPanel, setDataSearchPanel } = useContext(ContextSearchPanel);
+    const { dataSort, setDataSort } = useContext(ContextSort);
 
-    function changeSize(size:number):void {
+    const navigate = useNavigate();
+    useEffect(()=>{
+        if(window.location.search) {
+            const params = qs.parse(window.location.search.substring(1));
+            const {dataSort:string} = params;
+            setDataSort(dataSort);
+            console.log(params);
+        }
+    },[]);
+
+    useEffect(() => {
+        const queryString = qs.stringify({
+            dataBrand,
+            dataCategory,
+            dataSort,
+            dataSearchPanel,
+            dataSlider
+        })
+        navigate(`?${queryString}`);
+    }, [dataBrand, dataCategory, dataSort, dataSearchPanel, dataSlider])
+
+    function changeSize(size: number): void {
         setWidthCard(size);
     }
 
-    function searchProducts(products: IProduct[], searchData: string):IProduct[] {
+    function searchProducts(products: IProduct[], searchData: string): IProduct[] {
         if (searchData.length === 0) {
             return products;
         }
 
         return products.filter(item => {
-            return item.category.toLowerCase().indexOf(searchData.toLowerCase()) > -1 || 
-            item.brand.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
-            item.title.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
-            item.price.toString().indexOf(searchData) > -1 ||
-            item.stock.toString().indexOf(searchData) > -1 ||
-            item.rating.toString().indexOf(searchData) > -1 ||
-            item.discountPercentage.toString().indexOf(searchData) > -1
+            return item.category.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
+                item.brand.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
+                item.title.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
+                item.price.toString().indexOf(searchData) > -1 ||
+                item.stock.toString().indexOf(searchData) > -1 ||
+                item.rating.toString().indexOf(searchData) > -1 ||
+                item.discountPercentage.toString().indexOf(searchData) > -1
         })
     }
 
-    function onUpdateSearch(e:React.ChangeEvent<HTMLInputElement>):void{
+    function onUpdateSearch(e: React.ChangeEvent<HTMLInputElement>): void {
         const searchValue = (e.target as HTMLInputElement).value;
         setDataSearchPanel(searchValue);
     }
 
-    function updateCategory(products:IProduct[],checkedInputs:(string|undefined)[]):IProduct[]{
-        if( checkedInputs.length === 0){
+    function updateCategory(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
+        if (checkedInputs.length === 0) {
             return products;
         }
         const filteredArr: IProduct[] = [];
@@ -61,8 +84,8 @@ const MainProducts = () => {
         }
         return filteredArr;
     }
-    function updateBrand(products:IProduct[],checkedInputs:(string|undefined)[]):IProduct[]{
-        if( checkedInputs.length === 0){
+    function updateBrand(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
+        if (checkedInputs.length === 0) {
             return products;
         }
         const filteredArr: IProduct[] = [];
@@ -76,54 +99,54 @@ const MainProducts = () => {
         return filteredArr;
     }
 
-    function updatePrice(products:IProduct[], state:IDataSlider):IProduct[] {
-        const {minPrice, maxPrice} = state;
-        return products.filter(item=>item.price>=minPrice && item.price<=maxPrice)
+    function updatePrice(products: IProduct[], state: IDataSlider): IProduct[] {
+        const { minPrice, maxPrice } = state;
+        return products.filter(item => item.price >= minPrice && item.price <= maxPrice)
     }
-    function updateStock(products:IProduct[], state:IDataSlider):IProduct[] {
-        const {minStock, maxStock} = state;
-        return products.filter(item=>item.stock>=minStock && item.stock<=maxStock)
+    function updateStock(products: IProduct[], state: IDataSlider): IProduct[] {
+        const { minStock, maxStock } = state;
+        return products.filter(item => item.stock >= minStock && item.stock <= maxStock)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         const smallButton = document.querySelector('.small') as HTMLElement;
         const bigButton = document.querySelector('.big') as HTMLElement;
-        widthCard === 210 ? smallButton.className = 'small active' : smallButton.className = 'small'; 
-        widthCard === 350 ? bigButton.className = 'big active' : bigButton.className = 'big'; 
+        widthCard === 210 ? smallButton.className = 'small active' : smallButton.className = 'small';
+        widthCard === 350 ? bigButton.className = 'big active' : bigButton.className = 'big';
     });
 
-    function onUpdateSort(e:React.ChangeEvent<HTMLSelectElement> ) {
-        const whatSort:string = e.target.value;
+    function onUpdateSort(e: React.ChangeEvent<HTMLSelectElement>) {
+        const whatSort: string = e.target.value;
         setDataSort(whatSort);
     }
 
-    function sortProducts (products:IProduct[], kindOfSort:string):IProduct[] {
+    function sortProducts(products: IProduct[], kindOfSort: string): IProduct[] {
         const res = [...products];
         switch (kindOfSort) {
             case 'price-ASC':
-                return res.sort((a,b) => a.price - b.price);
+                return res.sort((a, b) => a.price - b.price);
             case 'prise-DESC':
-                return res.sort((a,b) => b.price - a.price);
+                return res.sort((a, b) => b.price - a.price);
             case 'rating-ASC':
-                return res.sort((a,b) => a.rating - b.rating);
+                return res.sort((a, b) => a.rating - b.rating);
             case 'rating-DESC':
-                return res.sort((a,b) => b.rating - a.rating);
+                return res.sort((a, b) => b.rating - a.rating);
             case 'discount-ASC':
-                return res.sort((a,b) => a.discountPercentage - b.discountPercentage);
+                return res.sort((a, b) => a.discountPercentage - b.discountPercentage);
             case 'discount-DESC':
-                return res.sort((a,b) => b.discountPercentage - a.discountPercentage);
-                default:
+                return res.sort((a, b) => b.discountPercentage - a.discountPercentage);
+            default:
                 return res;
         }
     }
 
     const visibleProducts = () => {
-        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, dataSort), dataSearchPanel),dataBrand),dataCategory),dataSlider),dataSlider);
+        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, dataSort), dataSearchPanel), dataBrand), dataCategory), dataSlider), dataSlider);
     }
 
-    useEffect(()=>{
-       setDataProducts(dataProducts => visibleProducts());
-    },[dataSearchPanel,dataFilter,dataSlider]);
+    useEffect(() => {
+        setDataProducts(dataProducts => visibleProducts());
+    }, [dataSearchPanel, dataFilter, dataSlider]);
 
     return (
         <div className="products">
@@ -143,10 +166,10 @@ const MainProducts = () => {
                     <input onChange={onUpdateSearch} placeholder='Search product' type="text" />
                 </div>
                 <div className="products__header__buttons">
-                    <button onClick={()=>changeSize(210)} className='small'>
+                    <button onClick={() => changeSize(210)} className='small'>
                         <img src={smallMenu} alt="small-menu" />
                     </button>
-                    <button onClick={()=>changeSize(350)}  className="big">
+                    <button onClick={() => changeSize(350)} className="big">
                         <img src={bigMenu} alt="big-menu" />
                     </button>
                 </div>
@@ -156,7 +179,7 @@ const MainProducts = () => {
                     visibleProducts().map(item => (
                         <MainProductsItem key={item.id}
                             objProduct={item}
-                            widthCard={widthCard}/>
+                            widthCard={widthCard} />
                     )) :
                     <div className='not-found'>No products found...	&#9785;</div>
                 }

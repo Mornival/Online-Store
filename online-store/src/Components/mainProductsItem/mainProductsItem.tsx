@@ -1,7 +1,7 @@
 import {useState, useContext, useEffect} from 'react';
 import './mainProductsItem.scss';
 import ContextCart from '../context/contextCart';
-import { ICard } from '../../types/types';
+import { ICard, IProduct } from '../../types/types';
 
 
 const MainProductsItem = ({objProduct, widthCard }: ICard) => {
@@ -32,7 +32,7 @@ const MainProductsItem = ({objProduct, widthCard }: ICard) => {
                 setButtonState(false);
             }
         })
-    })
+    },[dataCart]);
 
     return (
         <div style={{

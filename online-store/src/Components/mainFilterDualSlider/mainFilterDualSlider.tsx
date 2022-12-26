@@ -27,7 +27,6 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
         const classTarget = e.target.className;
         const index: number = +e.target.value;
         const [element]:IProduct[] = createAscArray().filter(item => item.id === index);
-
         if (classTarget === 'fromSlider'){
             if (maxSliderValue - +e.target.value <= minGap) {
                 setMinSliderValue(prev=>maxSliderValue - minGap);
@@ -48,7 +47,7 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
                 setMaxSliderValue(prev=>index);  
             }
             if (minSliderValue === +e.target.value) {
-                setMaxSliderValue(prev=>minSliderValue + minGap);
+                setMaxSlider(prev=>element[pos as keyof IProduct]);
                 (e.target.previousElementSibling as HTMLInputElement).style.zIndex = '0';
                 (e.target as HTMLInputElement).style.zIndex = '1';
             }
@@ -80,8 +79,21 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
             return +leftEl - +rightEl;
         });
         ascArray.forEach((item, i) => { item.id = i + 1; });
+
         return ascArray;
     }
+
+    // function uniqueObjByPos(){
+    //     const flags = {};
+    //     const uniquePos = products.filter(item => {
+    //         if (flags[item[pos as keyof IProduct]]) {
+    //             return false;
+    //         }
+    //         flags[item[pos as keyof IProduct]] = true;
+    //         return true;
+    //     });
+    //     return uniquePos;
+    // }
 
     function fillBetweenInputs(){
         return {
@@ -93,18 +105,18 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
             )`
         }
     }
-    
+
     useEffect(()=>{
         setMinSlider(prev=>minValue);
-        setMaxSlider(prev=>maxValue);
+        setMaxSlider(prev=>maxValue);        
         const minEl = createAscArray().filter(item => item[pos as keyof IProduct] === minValue);
         const maxEl = createAscArray().filter(item => item[pos as keyof IProduct] === maxValue);
         if (minEl.length === 0 || maxEl.length === 0) {
             setMinSliderValue(1);
             setMaxSliderValue(100);
         } else {
-            setMinSliderValue(minEl[maxEl.length - 1]?.id);
-            setMaxSliderValue(maxEl[maxEl.length - 1]?.id);
+            setMinSliderValue(minEl[0].id);
+            setMaxSliderValue(maxEl[0].id);
         }
     },[minValue, maxValue]);
 

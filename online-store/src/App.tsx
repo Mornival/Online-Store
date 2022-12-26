@@ -16,6 +16,7 @@ import ContextFilter from './Components/context/contextFilter';
 import ContextSlider from './Components/context/contextSlider';
 import ContextSearchPanel from './Components/context/contextSearchPanel';
 import ContextSort from './Components/context/contextSort';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   const { products } = defaultDataProducts;
@@ -28,6 +29,7 @@ function App() {
     minStock: 2,
     maxStock: 150
   });
+
   const [dataSearchPanel, setDataSearchPanel] = useState<string>('');
   const [dataSort, setDataSort] = useState<string>('price-ASC');
 
@@ -63,6 +65,7 @@ function App() {
                 setDataSort
               }}>
 
+                <Router>
                 <MainHeader />
                 <MainContent>
                   <MainFilters>
@@ -75,9 +78,12 @@ function App() {
                       minValue={minStock}
                       maxValue={maxStock} />
                   </MainFilters>
-                  <MainProducts />
+                  <Routes>
+                    <Route path='/' element={<MainProducts />}/>
+                  </Routes>
                 </MainContent>
                 <MainFooter />
+                </Router>
 
               </ContextSort.Provider>
             </ContextSearchPanel.Provider>
