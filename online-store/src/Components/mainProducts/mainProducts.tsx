@@ -18,22 +18,13 @@ const MainProducts = () => {
     const { products } = defaultDataProducts;
     const [widthCard, setWidthCard] = useState(350);
     const { setDataProducts } = useContext(contextProducts);
-    const { dataFilter, setDataFilter } = useContext(ContextFilter);
+    const { dataFilter} = useContext(ContextFilter);
     const { dataBrand, dataCategory } = dataFilter;
     const { dataSlider } = useContext(ContextSlider);
     const { dataSearchPanel, setDataSearchPanel } = useContext(ContextSearchPanel);
     const { dataSort, setDataSort } = useContext(ContextSort);
 
     const navigate = useNavigate();
-    useEffect(()=>{
-        if(window.location.search) {
-            const params = qs.parse(window.location.search.substring(1));
-            const {dataSort:string} = params;
-            setDataSort(dataSort);
-            console.log(params);
-        }
-    },[]);
-
     useEffect(() => {
         const queryString = qs.stringify({
             dataBrand,
@@ -125,7 +116,7 @@ const MainProducts = () => {
         switch (kindOfSort) {
             case 'price-ASC':
                 return res.sort((a, b) => a.price - b.price);
-            case 'prise-DESC':
+            case 'price-DESC':
                 return res.sort((a, b) => b.price - a.price);
             case 'rating-ASC':
                 return res.sort((a, b) => a.rating - b.rating);
@@ -153,7 +144,7 @@ const MainProducts = () => {
             <div className="products__header">
                 <select onChange={onUpdateSort} className='products__header__select' name="sorts" id="sorts-select">
                     <option className='default-select' value="price-ASC">Sort by price ASC</option>
-                    <option value="prise-DESC">Sort by price DESC</option>
+                    <option value="price-DESC">Sort by price DESC</option>
                     <option value="rating-ASC">Sort by rating ASC</option>
                     <option value="rating-DESC">Sort by rating DESC</option>
                     <option value="discount-ASC">Sort by discount ASC</option>
@@ -163,7 +154,7 @@ const MainProducts = () => {
                     Found: <span>{visibleProducts().length}</span>
                 </div>
                 <div className='products__header__search'>
-                    <input onChange={onUpdateSearch} placeholder='Search product' type="text" />
+                    <input value={dataSearchPanel} onChange={onUpdateSearch} placeholder='Search product' type="text" />
                 </div>
                 <div className="products__header__buttons">
                     <button onClick={() => changeSize(210)} className='small'>

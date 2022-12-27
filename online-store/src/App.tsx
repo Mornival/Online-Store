@@ -9,6 +9,7 @@ import MainFooter from './Components/mainFooter/mainFooter';
 import { defaultDataProducts } from './data/data';
 import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
 import './App.scss';
+import qs from 'qs';
 
 import ContextCart from './Components/context/contextCart';
 import contextProducts from './Components/context/contextProducts';
@@ -17,6 +18,7 @@ import ContextSlider from './Components/context/contextSlider';
 import ContextSearchPanel from './Components/context/contextSearchPanel';
 import ContextSort from './Components/context/contextSort';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+const params = qs.parse(window.location.search.substring(1));
 
 function App() {
   const { products } = defaultDataProducts;
@@ -24,10 +26,10 @@ function App() {
   const [dataProducts, setDataProducts] = useState<IProduct[]>([...products]);
   const [dataFilter, setDataFilter] = useState<IDataFilter>({ dataCategory: [], dataBrand: [] });
   const [dataSlider, setDataSlider] = useState<IDataSlider>({
-    minPrice: 10,
-    maxPrice: 1749,
-    minStock: 2,
-    maxStock: 150
+     minPrice: 10,
+        maxPrice: 1749,
+        minStock: 2,
+        maxStock: 150
   });
 
   const [dataSearchPanel, setDataSearchPanel] = useState<string>('');
