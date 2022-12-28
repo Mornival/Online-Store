@@ -23,6 +23,7 @@ export interface ICard {
     key?: number,
     objProduct: IProduct,
     widthCard?: number,
+    idNOMER2?:number
 }
 
 export interface IDataFilter {

@@ -6,10 +6,11 @@ import MainFilterDualSlider from './Components/mainFilterDualSlider/mainFilterDu
 import MainFilterPosition from './Components/mainFilterPosition/mainFilterPosition';
 import MainProducts from './Components/mainProducts/mainProducts';
 import MainFooter from './Components/mainFooter/mainFooter';
+import BasketOfGoods from './Components/backetOFselectedGoods/BasketOfSelectedGoods';
 import { defaultDataProducts } from './data/data';
 import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
 import './App.scss';
-import qs from 'qs';
+// import qs from 'qs';
 
 import ContextCart from './Components/context/contextCart';
 import contextProducts from './Components/context/contextProducts';
@@ -17,8 +18,10 @@ import ContextFilter from './Components/context/contextFilter';
 import ContextSlider from './Components/context/contextSlider';
 import ContextSearchPanel from './Components/context/contextSearchPanel';
 import ContextSort from './Components/context/contextSort';
+import ModalContext, { defaultModal, DescriptionContext, defaultDescription } from './Components/context/OtherContexts';
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-const params = qs.parse(window.location.search.substring(1));
+// const params = qs.parse(window.location.search.substring(1));
 
 function App() {
   const { products } = defaultDataProducts;
@@ -26,14 +29,18 @@ function App() {
   const [dataProducts, setDataProducts] = useState<IProduct[]>([...products]);
   const [dataFilter, setDataFilter] = useState<IDataFilter>({ dataCategory: [], dataBrand: [] });
   const [dataSlider, setDataSlider] = useState<IDataSlider>({
-     minPrice: 10,
-        maxPrice: 1749,
-        minStock: 2,
-        maxStock: 150
+    minPrice: 10,
+    maxPrice: 1749,
+    minStock: 2,
+    maxStock: 150
   });
-
   const [dataSearchPanel, setDataSearchPanel] = useState<string>('');
   const [dataSort, setDataSort] = useState<string>('price-ASC');
+
+  const [modal, toggleModal] = useState(defaultModal.modal);
+  const [open, toggleDescription] = useState(defaultDescription.open);
+  const setModal = () => { toggleModal(!modal) };
+  const setDescrition = () => { toggleDescription(!open) };
 
   const prices: number[] = dataProducts.map(item => item.price);
   const stocks: number[] = dataProducts.map(item => item.stock);
@@ -66,27 +73,42 @@ function App() {
                 dataSort,
                 setDataSort
               }}>
+                <ModalContext.Provider value={{
+                  modal,
+                  setModal
+                }}>
+                  <DescriptionContext.Provider value={{
+                    open,
+                    setDescrition
+                  }}>
 
-                <Router>
-                <MainHeader />
-                <MainContent>
-                  <MainFilters>
-                    <MainFilterPosition classPosition={'category'} />
-                    <MainFilterPosition classPosition={'brand'} />
-                    <MainFilterDualSlider title={'Price'}
-                      minValue={minPrice}
-                      maxValue={maxPrice} />
-                    <MainFilterDualSlider title={'Stock'}
-                      minValue={minStock}
-                      maxValue={maxStock} />
-                  </MainFilters>
-                  <Routes>
-                    <Route path='/' element={<MainProducts />}/>
-                  </Routes>
-                </MainContent>
-                <MainFooter />
-                </Router>
 
+                    <Router>
+                      <MainHeader />
+                      <Routes>
+                        <Route path='/' element={  
+                        <MainContent>
+                            <MainFilters>
+                              <MainFilterPosition classPosition={'category'} />
+                              <MainFilterPosition classPosition={'brand'} />
+                              <MainFilterDualSlider title={'Price'}
+                                minValue={minPrice}
+                                maxValue={maxPrice} />
+                              <MainFilterDualSlider title={'Stock'}
+                                minValue={minStock}
+                                maxValue={maxStock} />
+                            </MainFilters>
+                            <MainProducts />
+                          </MainContent>}
+                          />
+                        <Route path='/basket' element={<BasketOfGoods />}/>
+                      </Routes>
+                      <MainFooter />
+                    </Router>
+
+
+                  </DescriptionContext.Provider>
+                </ModalContext.Provider>
               </ContextSort.Provider>
             </ContextSearchPanel.Provider>
           </ContextSlider.Provider>

@@ -1,0 +1,53 @@
+.summary-body{
+    width:100%;
+    height:305px;
+    color:lightgrey;
+    text-align:center;
+    h2{
+        font-size: 2.5rem;
+        margin-top:10px;
+        margin-bottom:10px;
+    }
+    span{
+        margin-left:10px;
+        color:grey;
+    }
+    input{
+        appearance: none;
+        width:300px;
+        height:50px;
+        text-align:center;
+        padding:10px;
+        font-size:2rem;
+        border:2px solid lightgrey;
+        border-radius:10px;
+        color: #181a1c;
+        &:focus{
+            outline: none;
+        }
+        &::placeholder{
+            text-align: center;
+            color:grey;
+            font-size:2rem;
+        }
+    }
+    p{
+        margin-top:10px;
+        font-size:1.5rem;
+        color:grey;
+    }
+    button{
+        margin-top:20px;
+        width:200px;
+        height:50px;
+        font-size:2rem;
+        color:#181a1c;
+        background:white;
+        border:2px solid lightgrey;
+        border-radius:10px;
+        cursor:pointer;
+        &:hover{
+            opacity:0.5;
+        }
+    }
+}

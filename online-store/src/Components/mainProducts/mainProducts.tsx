@@ -11,8 +11,8 @@ import ContextFilter from '../context/contextFilter';
 import ContextSlider from '../context/contextSlider';
 import ContextSearchPanel from '../context/contextSearchPanel';
 import ContextSort from '../context/contextSort';
-import qs from 'qs';
-import { useNavigate } from 'react-router-dom';
+// import qs from 'qs';
+// import { useNavigate } from 'react-router-dom';
 
 const MainProducts = () => {
     const { products } = defaultDataProducts;
@@ -24,17 +24,17 @@ const MainProducts = () => {
     const { dataSearchPanel, setDataSearchPanel } = useContext(ContextSearchPanel);
     const { dataSort, setDataSort } = useContext(ContextSort);
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        const queryString = qs.stringify({
-            dataBrand,
-            dataCategory,
-            dataSort,
-            dataSearchPanel,
-            dataSlider
-        })
-        navigate(`?${queryString}`);
-    }, [dataBrand, dataCategory, dataSort, dataSearchPanel, dataSlider])
+    // const navigate = useNavigate();
+    // useEffect(() => {
+    //     const queryString = qs.stringify({
+    //         dataBrand,
+    //         dataCategory,
+    //         dataSort,
+    //         dataSearchPanel,
+    //         dataSlider
+    //     })
+    //     navigate(`?${queryString}`);
+    // }, [dataBrand, dataCategory, dataSort, dataSearchPanel, dataSlider])
 
     function changeSize(size: number): void {
         setWidthCard(size);
