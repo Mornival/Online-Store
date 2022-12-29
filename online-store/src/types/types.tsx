@@ -37,3 +37,16 @@ export interface IDataSlider {
     minStock: number,
     maxStock: number
 }
+
+export interface IQuery {
+    querySearchPanel: string,
+    querySort: string,
+    queryCategory: (string | undefined)[],
+    queryBrand: (string | undefined)[],
+    querySlider: {
+        minPrice: number,
+        maxPrice: number,
+        minStock: number,
+        maxStock: number
+    }
+}

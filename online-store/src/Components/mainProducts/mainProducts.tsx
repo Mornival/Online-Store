@@ -1,7 +1,7 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
 import { useEffect, useState } from 'react';
 import { defaultDataProducts } from '../../data/data';
-import { IProduct, IDataSlider } from '../../types/types';
+import { IProduct, IDataSlider, IQuery } from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
@@ -11,31 +11,29 @@ import ContextFilter from '../context/contextFilter';
 import ContextSlider from '../context/contextSlider';
 import ContextSearchPanel from '../context/contextSearchPanel';
 import ContextSort from '../context/contextSort';
-// import qs from 'qs';
-// import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+// import ContextQuery from '../context/contextQuery';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
 const MainProducts = () => {
     const { products } = defaultDataProducts;
     const [widthCard, setWidthCard] = useState(350);
-    const { setDataProducts } = useContext(contextProducts);
+    const { dataProducts,setDataProducts } = useContext(contextProducts);
     const { dataFilter} = useContext(ContextFilter);
     const { dataBrand, dataCategory } = dataFilter;
     const { dataSlider } = useContext(ContextSlider);
     const { dataSearchPanel, setDataSearchPanel } = useContext(ContextSearchPanel);
     const { dataSort, setDataSort } = useContext(ContextSort);
+    // const {dataQuery, setDataQuery} = useContext(ContextQuery);
 
-    // const navigate = useNavigate();
-    // useEffect(() => {
-    //     const queryString = qs.stringify({
-    //         dataBrand,
-    //         dataCategory,
-    //         dataSort,
-    //         dataSearchPanel,
-    //         dataSlider
-    //     })
-    //     navigate(`?${queryString}`);
-    // }, [dataBrand, dataCategory, dataSort, dataSearchPanel, dataSlider])
-
+    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const postQuery = searchParams.get('post') || '';
+    const sortQuery = searchParams.get('sort') || '';
+    const categoryQuery = searchParams.get('category')?.split('|') || [];
+    const brandQuery = searchParams.get('brand')?.split('|') || [];
+  
     function changeSize(size: number): void {
         setWidthCard(size);
     }
@@ -44,7 +42,6 @@ const MainProducts = () => {
         if (searchData.length === 0) {
             return products;
         }
-
         return products.filter(item => {
             return item.category.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
                 item.brand.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
@@ -58,10 +55,18 @@ const MainProducts = () => {
 
     function onUpdateSearch(e: React.ChangeEvent<HTMLInputElement>): void {
         const searchValue = (e.target as HTMLInputElement).value;
-        setDataSearchPanel(searchValue);
+        // setDataSearchPanel(searchValue);
+        const queryString = window.location.search.substring(1);
+        const queryObj = qs.parse(queryString);
+        setSearchParams({
+            ...queryObj, post: searchValue
+        });
     }
-
+    
     function updateCategory(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
+        if(!checkedInputs || !checkedInputs[0]) {
+            return products;
+        }
         if (checkedInputs.length === 0) {
             return products;
         }
@@ -76,6 +81,9 @@ const MainProducts = () => {
         return filteredArr;
     }
     function updateBrand(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
+        if(!checkedInputs || !checkedInputs[0]) {
+            return products;
+        }
         if (checkedInputs.length === 0) {
             return products;
         }
@@ -108,7 +116,12 @@ const MainProducts = () => {
 
     function onUpdateSort(e: React.ChangeEvent<HTMLSelectElement>) {
         const whatSort: string = e.target.value;
-        setDataSort(whatSort);
+        // setDataSort(whatSort);
+        const queryString = window.location.search.substring(1);
+        const queryObj = qs.parse(queryString);
+        setSearchParams({
+            ...queryObj, sort: whatSort
+        });
     }
 
     function sortProducts(products: IProduct[], kindOfSort: string): IProduct[] {
@@ -130,14 +143,15 @@ const MainProducts = () => {
                 return res;
         }
     }
-
+   
     const visibleProducts = () => {
-        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, dataSort), dataSearchPanel), dataBrand), dataCategory), dataSlider), dataSlider);
+        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, sortQuery), postQuery), brandQuery), categoryQuery), dataSlider), dataSlider);
     }
 
     useEffect(() => {
         setDataProducts(dataProducts => visibleProducts());
-    }, [dataSearchPanel, dataFilter, dataSlider]);
+        console.log('chenge');
+    }, [postQuery, sortQuery, dataBrand,dataCategory,dataSlider]);
 
     return (
         <div className="products">
@@ -154,7 +168,7 @@ const MainProducts = () => {
                     Found: <span>{visibleProducts().length}</span>
                 </div>
                 <div className='products__header__search'>
-                    <input value={dataSearchPanel} onChange={onUpdateSearch} placeholder='Search product' type="text" />
+                    <input value={postQuery} onChange={onUpdateSearch} placeholder='Search product' type="text" />
                 </div>
                 <div className="products__header__buttons">
                     <button onClick={() => changeSize(210)} className='small'>

@@ -83,6 +83,7 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
         return ascArray;
     }
 
+    
     // function uniqueObjByPos(){
     //     const flags = {};
     //     const uniquePos = products.filter(item => {

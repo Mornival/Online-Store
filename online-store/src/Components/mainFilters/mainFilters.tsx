@@ -8,8 +8,11 @@ import { defaultStateFilter } from '../context/contextFilter';
 import { defaultStateSlider } from '../context/contextSlider';
 import { defaultStateSearchPanel } from '../context/contextSearchPanel';
 import { defaultStateSort } from '../context/contextSort';
+import qs from 'qs';
+import { useSearchParams } from 'react-router-dom';
 
 const MainFilters = ({children}:{children: ReactNode}) => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const {setDataFilter} = useContext(ContextFilter);
     const {setDataSlider} = useContext(ContextSlider);
     const {setDataSearchPanel} = useContext(ContextSearchPanel);
@@ -24,6 +27,7 @@ const MainFilters = ({children}:{children: ReactNode}) => {
         setDataSlider(dataSlider);
         setDataSearchPanel(dataSearchPanel);
         setDataSort(dataSort);
+        setSearchParams('')
     }
 
     function defaultStateElements() {

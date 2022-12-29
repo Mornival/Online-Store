@@ -4,11 +4,13 @@ import MainFilterPositionItems from '../mainFilterPositionItems/mainFilterPositi
 import './mainFilterPosition.scss';
 import { IProduct } from '../../types/types';
 import ContextFilter from '../context/contextFilter';
+import { useSearchParams } from 'react-router-dom';
+import qs from 'qs';
 
 
 const MainFilterPosition = ({classPosition}:{classPosition:string}) => {
     const {products} = defaultDataProducts;
-
+    const [searchParams, setSearchParams] = useSearchParams();
     const {dataFilter, setDataFilter} = useContext(ContextFilter);
 
     const positionUnique:Set<string|number|string[]> = new Set(products.map(item => item[classPosition as keyof IProduct]));
@@ -23,6 +25,11 @@ const MainFilterPosition = ({classPosition}:{classPosition:string}) => {
             ...dataFilter,
             dataCategory: [...checkedInputsCategoryValues]
         });
+        const queryString = window.location.search.substring(1);
+        const queryObj = qs.parse(queryString);
+        setSearchParams({
+            ...queryObj, category: [...checkedInputsCategoryValues].join('|') 
+        });
     }
 
     function onUpdateFilterBrand(){
@@ -32,6 +39,11 @@ const MainFilterPosition = ({classPosition}:{classPosition:string}) => {
         setDataFilter({
             ...dataFilter,
             dataBrand: [...checkedInputsBrandValues]
+        });
+        const queryString = window.location.search.substring(1);
+        const queryObj = qs.parse(queryString);
+        setSearchParams({
+            ...queryObj, brand: [...checkedInputsBrandValues].join('|') 
         });
     }
 
