@@ -22,8 +22,7 @@ export interface IProduct {
 export interface ICard {
     key?: number,
     objProduct: IProduct,
-    widthCard?: number,
-    idCard?:number
+    widthCard?: number
 }
 
 export interface IDataFilter {
