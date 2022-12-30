@@ -12,9 +12,7 @@ import ContextSlider from '../context/contextSlider';
 import ContextSearchPanel from '../context/contextSearchPanel';
 import ContextSort from '../context/contextSort';
 import { useSearchParams } from 'react-router-dom';
-// import ContextQuery from '../context/contextQuery';
 import qs from 'qs';
-import { useNavigate } from 'react-router-dom';
 
 const MainProducts = () => {
     const { products } = defaultDataProducts;
@@ -25,17 +23,25 @@ const MainProducts = () => {
     const { dataSlider } = useContext(ContextSlider);
     const { dataSearchPanel, setDataSearchPanel } = useContext(ContextSearchPanel);
     const { dataSort, setDataSort } = useContext(ContextSort);
-    // const {dataQuery, setDataQuery} = useContext(ContextQuery);
 
-    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
+    const buttonQuery = searchParams.get('button') || '350';
     const postQuery = searchParams.get('post') || '';
     const sortQuery = searchParams.get('sort') || '';
     const categoryQuery = searchParams.get('category')?.split('|') || [];
     const brandQuery = searchParams.get('brand')?.split('|') || [];
+    const minPriceQuery = searchParams.get('minPrice') || '10';
+    const maxPriceQuery = searchParams.get('maxPrice') || '1749';
+    const minStockQuery = searchParams.get('minStock') || '2';
+    const maxStockQuery = searchParams.get('maxStock') || '150';
   
     function changeSize(size: number): void {
         setWidthCard(size);
+        const queryString = window.location.search.substring(1);
+        const queryObj = qs.parse(queryString);
+        setSearchParams({
+            ...queryObj, button: `${size}`
+        });
     }
 
     function searchProducts(products: IProduct[], searchData: string): IProduct[] {
@@ -55,7 +61,7 @@ const MainProducts = () => {
 
     function onUpdateSearch(e: React.ChangeEvent<HTMLInputElement>): void {
         const searchValue = (e.target as HTMLInputElement).value;
-        // setDataSearchPanel(searchValue);
+        setDataSearchPanel(searchValue);
         const queryString = window.location.search.substring(1);
         const queryObj = qs.parse(queryString);
         setSearchParams({
@@ -110,13 +116,13 @@ const MainProducts = () => {
     useEffect(() => {
         const smallButton = document.querySelector('.small') as HTMLElement;
         const bigButton = document.querySelector('.big') as HTMLElement;
-        widthCard === 210 ? smallButton.className = 'small active' : smallButton.className = 'small';
-        widthCard === 350 ? bigButton.className = 'big active' : bigButton.className = 'big';
+        buttonQuery === '210' ? smallButton.className = 'small active' : smallButton.className = 'small';
+        buttonQuery === '350' ? bigButton.className = 'big active' : bigButton.className = 'big';
     });
 
     function onUpdateSort(e: React.ChangeEvent<HTMLSelectElement>) {
         const whatSort: string = e.target.value;
-        // setDataSort(whatSort);
+        setDataSort(whatSort);
         const queryString = window.location.search.substring(1);
         const queryObj = qs.parse(queryString);
         setSearchParams({
@@ -143,15 +149,69 @@ const MainProducts = () => {
                 return res;
         }
     }
+
+    function changeDomStateOfSelectOptions(){
+         const selectOptions = document.querySelectorAll('.products__header__select option') as NodeListOf<HTMLOptionElement>;
+            selectOptions.forEach(item => {
+                item.selected = false;
+            })
+            selectOptions.forEach(item => {
+                if (item.value === sortQuery) {
+                    item.selected = true
+                }
+            })
+    }
+
+    function changeDomStateOfCategoryOrBrandItems(pos:string, queryPos:string[]):void{
+        const categoryLabels = document.querySelectorAll(`.${pos}__item label`) as NodeListOf<HTMLLabelElement>;
+        const categoryInputs = document.querySelectorAll(`.${pos}__item input`) as NodeListOf<HTMLInputElement>;
+        
+        categoryInputs.forEach(item => {
+            item.checked = false;
+        })
+
+        queryPos.forEach(query => {
+            categoryLabels.forEach(item => {
+                if(item.innerHTML === query) {
+                    (item.previousElementSibling as HTMLInputElement).checked = true;
+                }
+            })
+        })
+    }
+    useEffect(() => {
+        changeDomStateOfSelectOptions();
+    }, [sortQuery]);
+    useEffect(() => {
+        changeDomStateOfCategoryOrBrandItems('category', categoryQuery);
+    }, [categoryQuery]);
+    useEffect(() => {
+        changeDomStateOfCategoryOrBrandItems('brand', brandQuery);
+    }, [brandQuery]);
+    
    
     const visibleProducts = () => {
-        return updateStock(updatePrice(updateCategory(updateBrand(searchProducts(sortProducts(products, sortQuery), postQuery), brandQuery), categoryQuery), dataSlider), dataSlider);
+        const sliderQuery =   {
+            minPrice: +minPriceQuery,
+            maxPrice: +maxPriceQuery,
+            minStock: +minStockQuery,
+            maxStock: +maxStockQuery
+           }
+        return updateStock
+              (updatePrice
+              (updateCategory
+              (updateBrand
+              (searchProducts
+              (sortProducts (products, sortQuery), 
+                                       postQuery),
+                                       brandQuery),
+                                       categoryQuery), 
+                                       sliderQuery), 
+                                       sliderQuery);
     }
 
     useEffect(() => {
         setDataProducts(dataProducts => visibleProducts());
-        console.log('chenge');
-    }, [postQuery, sortQuery, dataBrand,dataCategory,dataSlider]);
+    }, [postQuery, sortQuery, dataBrand, dataCategory, dataSlider, minPriceQuery, maxPriceQuery, maxStockQuery, minStockQuery]);
 
     return (
         <div className="products">
@@ -184,7 +244,7 @@ const MainProducts = () => {
                     visibleProducts().map(item => (
                         <MainProductsItem key={item.id}
                             objProduct={item}
-                            widthCard={widthCard} />
+                            widthCard={+buttonQuery} />
                     )) :
                     <div className='not-found'>No products found...	&#9785;</div>
                 }

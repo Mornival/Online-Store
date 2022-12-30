@@ -2,6 +2,8 @@ import { useState,useEffect, useContext} from 'react';
 import { IProduct } from '../../types/types';
 import { defaultDataProducts } from '../../data/data';
 import ContextSlider from '../context/contextSlider';
+import { useSearchParams } from 'react-router-dom';
+import qs from 'qs';
 import './mainFilterDualSlider.scss';
 
 interface ISlider {
@@ -19,11 +21,11 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
     const [minSliderValue, setMinSliderValue] = useState(1);
     const [maxSliderValue, setMaxSliderValue] = useState(100);
     const {dataSlider,setDataSlider} = useContext(ContextSlider);
+    const [searchParams, setSearchParams] = useSearchParams();
 
 
     function onUpdateSliderValue(e: React.ChangeEvent<HTMLInputElement>) {
         e.preventDefault();
-        e.stopPropagation();
         const classTarget = e.target.className;
         const index: number = +e.target.value;
         const [element]:IProduct[] = createAscArray().filter(item => item.id === index);
@@ -56,17 +58,29 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
     }
 
     function onUpdateSliderFilters(){
+        const queryString = window.location.search.substring(1);
+        const queryObj = qs.parse(queryString);
         if (pos === 'price') {
             setDataSlider({
                 ...dataSlider,
                 minPrice: +minSlider,
                 maxPrice: +maxSlider,
             });
+            setSearchParams({
+                ...queryObj, 
+                minPrice: `${minSlider}`,
+                maxPrice: `${maxSlider}`
+            });
         } else {
             setDataSlider({
                 ...dataSlider,
                 minStock: +minSlider,
                 maxStock: +maxSlider,
+            });
+            setSearchParams({
+                ...queryObj, 
+                minStock: `${minSlider}`,
+                maxStock: `${maxSlider}`
             });
         }
     }

@@ -1,4 +1,4 @@
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useState } from 'react';
 import './mainFilters.scss';
 import ContextFilter from '../context/contextFilter';
 import ContextSlider from '../context/contextSlider';
@@ -21,6 +21,7 @@ const MainFilters = ({children}:{children: ReactNode}) => {
     const {dataSlider} = defaultStateSlider;
     const {dataSearchPanel} = defaultStateSearchPanel;
     const {dataSort} = defaultStateSort;
+    const [copy, setCopy] = useState(false);
     function onUpdateFilter() {
         defaultStateElements();
         setDataFilter(dataFilter);
@@ -42,14 +43,27 @@ const MainFilters = ({children}:{children: ReactNode}) => {
         brandInputs.forEach(item => { item.checked = false; });
     }
 
+    function CopyLink() {
+        navigator.clipboard.writeText(window.location.href)
+        .then(()=>{
+            setCopy(prev=>!copy);
+            setTimeout(()=> {
+                setCopy(prev=>!prev)
+            },1000);
+        })
+        .catch(err => {
+            alert("Failed with copy")
+        })
+    }
+
     return (
         <div className='filters'>
             <div className="filters__buttons">
                 <button onClick={onUpdateFilter} className='filters__buttons__reset'>
                     Reset Filters
                 </button>
-                <button  className='filters__buttons__copy-link'>
-                    Copy Link
+                <button onClick={CopyLink}  className='filters__buttons__copy-link'>
+                    {copy? 'Copied..' : 'Copy Link'}
                 </button>
             </div>
             {children}
