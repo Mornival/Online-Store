@@ -2,10 +2,11 @@ import {useState, useContext, useEffect} from 'react';
 import './mainProductsItem.scss';
 import ContextCart from '../context/contextCart';
 import { ICard } from '../../types/types';
+import { Link } from 'react-router-dom';
 
-
-const MainProductsItem = ({objProduct, widthCard }: ICard) => {
+const MainProductsItem = ({objProduct, widthCard , idCard }: ICard) => {
     const [buttonState, setButtonState] = useState(true);
+    const [dataIdCard, setDataIdCard] = useState(idCard);
     const boxShadow = buttonState ? 'none' : '0 0 25px wheat';
     const { dataCart, setDataCart } = useContext(ContextCart);
     const {id,title,price, discountPercentage,category, brand, rating, stock, thumbnail} = objProduct;
@@ -51,7 +52,7 @@ const MainProductsItem = ({objProduct, widthCard }: ICard) => {
             </div>
             <div className="card__buttons">
                 <button onClick={()=>onAddCart()}>{buttonState ?  textButtonAdd : textButtonDrop }</button>
-                <button>DETAILS</button>
+                <Link to={`/details/${dataIdCard}`}><button>DETAILS</button></Link>
             </div>
         </div>
     );

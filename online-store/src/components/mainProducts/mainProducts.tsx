@@ -244,7 +244,8 @@ const MainProducts = () => {
                     visibleProducts().map(item => (
                         <MainProductsItem key={item.id}
                             objProduct={item}
-                            widthCard={+buttonQuery} />
+                            widthCard={+buttonQuery}
+                            idCard={item.id} />
                     )) :
                     <div className='not-found'>No products found...	&#9785;</div>
                 }

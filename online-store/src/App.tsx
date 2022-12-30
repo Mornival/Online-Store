@@ -9,6 +9,8 @@ import MainFooter from './Components/mainFooter/mainFooter';
 import BasketOfGoods from './Components/backetOFselectedGoods/BasketOfSelectedGoods';
 import { defaultDataProducts } from './data/data';
 import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
+import Page404 from './Components/page404/Page404';
+import ProductDescription from './Components/productDescriptionPage/ProductDescriptionPage';
 import './App.scss';
 
 import ContextCart from './Components/context/contextCart';
@@ -99,6 +101,8 @@ function App() {
                             <MainProducts />
                           </MainContent>}
                         />
+                        <Route path='/details/:id' element={<ProductDescription products={dataProducts}/>} />
+                        <Route path='*' element={<Page404 />} />
                         <Route path='/basket' element={<BasketOfGoods />} />
                       </Routes>
                       <MainFooter />
