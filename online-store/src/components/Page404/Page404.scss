@@ -1,14 +1,12 @@
 .page404-div{
     position:relative;
     margin-left:calc(50% - 250px);
-    margin-top:calc(50vh - 50px);
     width:500px;
-    height:100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding:15px;
+    text-align:center;
+    margin-top:20px;
     border-radius:20px;
-    border:2px solid lightgrey #181a1c;
+    border:2px solid #181a1c;
     background-color:#181a1c;
 }
 .page404-h2{

@@ -19,6 +19,7 @@
         text-align:center;
         padding:10px;
         font-size:2rem;
+        border:2px solid lightgrey;
         border-radius:10px;
         color: #181a1c;
         &:focus{
@@ -26,7 +27,6 @@
         }
         &::placeholder{
             text-align: center;
-            line-height:20px;
             color:grey;
             font-size:2rem;
         }
@@ -42,7 +42,8 @@
         height:50px;
         font-size:2rem;
         color:#181a1c;
-        background:lightgrey;
+        background:white;
+        border:2px solid lightgrey;
         border-radius:10px;
         cursor:pointer;
         &:hover{
