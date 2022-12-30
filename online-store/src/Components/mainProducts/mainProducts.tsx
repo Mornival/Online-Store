@@ -27,7 +27,7 @@ const MainProducts = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const buttonQuery = searchParams.get('button') || '350';
     const postQuery = searchParams.get('post') || '';
-    const sortQuery = searchParams.get('sort') || '';
+    const sortQuery = searchParams.get('sort') || 'price-ASC';
     const categoryQuery = searchParams.get('category')?.split('|') || [];
     const brandQuery = searchParams.get('brand')?.split('|') || [];
     const minPriceQuery = searchParams.get('minPrice') || '10';
