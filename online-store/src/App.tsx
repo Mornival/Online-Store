@@ -8,11 +8,9 @@ import MainProducts from './Components/mainProducts/mainProducts';
 import MainFooter from './Components/mainFooter/mainFooter';
 import BasketOfGoods from './Components/backetOFselectedGoods/BasketOfSelectedGoods';
 import { defaultDataProducts } from './data/data';
-import { ICard, IProduct, IDataFilter, IDataSlider, IQuery } from './types/types';
-import { defaultStateQuery } from './Components/context/contextQuery';
+import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
 import './App.scss';
 
-import ContextQuery from './Components/context/contextQuery';
 import ContextCart from './Components/context/contextCart';
 import contextProducts from './Components/context/contextProducts';
 import ContextFilter from './Components/context/contextFilter';
@@ -25,7 +23,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   const { products } = defaultDataProducts;
-  const [dataQuery, setDataQuery] = useState<IQuery>(defaultStateQuery.dataQuery);
   const [dataCart, setDataCart] = useState<ICard[]>([]);
   const [dataProducts, setDataProducts] = useState<IProduct[]>([...products]);
   const [dataFilter, setDataFilter] = useState<IDataFilter>({ dataCategory: [], dataBrand: [] });
@@ -50,77 +47,72 @@ function App() {
   const [minStock, maxStock]: number[] = stocks.length ? [Math.min(...stocks), Math.max(...stocks)] : [0, 0];
 
   return (
-    <ContextQuery.Provider value={{
-      dataQuery,
-      setDataQuery
+    <ContextCart.Provider value={{ // context cart
+      dataCart,
+      setDataCart
     }}>
-      <ContextCart.Provider value={{ // context cart
-        dataCart,
-        setDataCart
+      <contextProducts.Provider value={{ // context filtered goods
+        dataProducts,
+        setDataProducts
       }}>
-        <contextProducts.Provider value={{ // context filtered goods
-          dataProducts,
-          setDataProducts
+        <ContextFilter.Provider value={{ // context filter by category and brand
+          dataFilter,
+          setDataFilter
         }}>
-          <ContextFilter.Provider value={{ // context filter by category and brand
-            dataFilter,
-            setDataFilter
+          <ContextSlider.Provider value={{ // context filter by price and stock
+            dataSlider,
+            setDataSlider
           }}>
-            <ContextSlider.Provider value={{ // context filter by price and stock
-              dataSlider,
-              setDataSlider
+            <ContextSearchPanel.Provider value={{ // context search panel
+              dataSearchPanel,
+              setDataSearchPanel
             }}>
-              <ContextSearchPanel.Provider value={{ // context search panel
-                dataSearchPanel,
-                setDataSearchPanel
+              <ContextSort.Provider value={{ // context sort bt price, rating, discount
+                dataSort,
+                setDataSort
               }}>
-                <ContextSort.Provider value={{ // context sort bt price, rating, discount
-                  dataSort,
-                  setDataSort
+                <ModalContext.Provider value={{
+                  modal,
+                  setModal
                 }}>
-                  <ModalContext.Provider value={{
-                    modal,
-                    setModal
+                  <DescriptionContext.Provider value={{
+                    open,
+                    setDescrition
                   }}>
-                    <DescriptionContext.Provider value={{
-                      open,
-                      setDescrition
-                    }}>
 
 
-                      <Router>
-                        <MainHeader />
-                        <Routes>
-                          <Route path='/' element={
-                            <MainContent>
-                              <MainFilters>
-                                <MainFilterPosition classPosition={'category'} />
-                                <MainFilterPosition classPosition={'brand'} />
-                                <MainFilterDualSlider title={'Price'}
-                                  minValue={minPrice}
-                                  maxValue={maxPrice} />
-                                <MainFilterDualSlider title={'Stock'}
-                                  minValue={minStock}
-                                  maxValue={maxStock} />
-                              </MainFilters>
-                              <MainProducts />
-                            </MainContent>}
-                          />
-                          <Route path='/basket' element={<BasketOfGoods />} />
-                        </Routes>
-                        <MainFooter />
-                      </Router>
+                    <Router>
+                      <MainHeader />
+                      <Routes>
+                        <Route path='/' element={
+                          <MainContent>
+                            <MainFilters>
+                              <MainFilterPosition classPosition={'category'} />
+                              <MainFilterPosition classPosition={'brand'} />
+                              <MainFilterDualSlider title={'Price'}
+                                minValue={minPrice}
+                                maxValue={maxPrice} />
+                              <MainFilterDualSlider title={'Stock'}
+                                minValue={minStock}
+                                maxValue={maxStock} />
+                            </MainFilters>
+                            <MainProducts />
+                          </MainContent>}
+                        />
+                        <Route path='/basket' element={<BasketOfGoods />} />
+                      </Routes>
+                      <MainFooter />
+                    </Router>
 
 
-                    </DescriptionContext.Provider>
-                  </ModalContext.Provider>
-                </ContextSort.Provider>
-              </ContextSearchPanel.Provider>
-            </ContextSlider.Provider>
-          </ContextFilter.Provider>
-        </contextProducts.Provider>
-      </ContextCart.Provider>
-    </ContextQuery.Provider>
+                  </DescriptionContext.Provider>
+                </ModalContext.Provider>
+              </ContextSort.Provider>
+            </ContextSearchPanel.Provider>
+          </ContextSlider.Provider>
+        </ContextFilter.Provider>
+      </contextProducts.Provider>
+    </ContextCart.Provider>
   );
 }
 

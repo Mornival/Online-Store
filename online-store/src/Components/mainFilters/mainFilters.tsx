@@ -8,7 +8,6 @@ import { defaultStateFilter } from '../context/contextFilter';
 import { defaultStateSlider } from '../context/contextSlider';
 import { defaultStateSearchPanel } from '../context/contextSearchPanel';
 import { defaultStateSort } from '../context/contextSort';
-import qs from 'qs';
 import { useSearchParams } from 'react-router-dom';
 
 const MainFilters = ({children}:{children: ReactNode}) => {

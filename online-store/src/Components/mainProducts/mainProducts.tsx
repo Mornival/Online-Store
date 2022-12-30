@@ -1,7 +1,7 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
 import { useEffect, useState } from 'react';
 import { defaultDataProducts } from '../../data/data';
-import { IProduct, IDataSlider, IQuery } from '../../types/types';
+import { IProduct, IDataSlider } from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
@@ -16,13 +16,13 @@ import qs from 'qs';
 
 const MainProducts = () => {
     const { products } = defaultDataProducts;
-    const [widthCard, setWidthCard] = useState(350);
-    const { dataProducts,setDataProducts } = useContext(contextProducts);
-    const { dataFilter} = useContext(ContextFilter);
+    const [ widthCard, setWidthCard] = useState(350);
+    const { setDataProducts } = useContext(contextProducts);
+    const { dataFilter } = useContext(ContextFilter);
     const { dataBrand, dataCategory } = dataFilter;
     const { dataSlider } = useContext(ContextSlider);
-    const { dataSearchPanel, setDataSearchPanel } = useContext(ContextSearchPanel);
-    const { dataSort, setDataSort } = useContext(ContextSort);
+    const { setDataSearchPanel } = useContext(ContextSearchPanel);
+    const { setDataSort } = useContext(ContextSort);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const buttonQuery = searchParams.get('button') || '350';
@@ -34,7 +34,7 @@ const MainProducts = () => {
     const maxPriceQuery = searchParams.get('maxPrice') || '1749';
     const minStockQuery = searchParams.get('minStock') || '2';
     const maxStockQuery = searchParams.get('maxStock') || '150';
-  
+
     function changeSize(size: number): void {
         setWidthCard(size);
         const queryString = window.location.search.substring(1);
@@ -68,9 +68,9 @@ const MainProducts = () => {
             ...queryObj, post: searchValue
         });
     }
-    
+
     function updateCategory(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
-        if(!checkedInputs || !checkedInputs[0]) {
+        if (!checkedInputs || !checkedInputs[0]) {
             return products;
         }
         if (checkedInputs.length === 0) {
@@ -87,7 +87,7 @@ const MainProducts = () => {
         return filteredArr;
     }
     function updateBrand(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
-        if(!checkedInputs || !checkedInputs[0]) {
+        if (!checkedInputs || !checkedInputs[0]) {
             return products;
         }
         if (checkedInputs.length === 0) {
@@ -150,29 +150,29 @@ const MainProducts = () => {
         }
     }
 
-    function changeDomStateOfSelectOptions(){
-         const selectOptions = document.querySelectorAll('.products__header__select option') as NodeListOf<HTMLOptionElement>;
-            selectOptions.forEach(item => {
-                item.selected = false;
-            })
-            selectOptions.forEach(item => {
-                if (item.value === sortQuery) {
-                    item.selected = true
-                }
-            })
+    function changeDomStateOfSelectOptions() {
+        const selectOptions = document.querySelectorAll('.products__header__select option') as NodeListOf<HTMLOptionElement>;
+        selectOptions.forEach(item => {
+            item.selected = false;
+        })
+        selectOptions.forEach(item => {
+            if (item.value === sortQuery) {
+                item.selected = true
+            }
+        })
     }
 
-    function changeDomStateOfCategoryOrBrandItems(pos:string, queryPos:string[]):void{
+    function changeDomStateOfCategoryOrBrandItems(pos: string, queryPos: string[]): void {
         const categoryLabels = document.querySelectorAll(`.${pos}__item label`) as NodeListOf<HTMLLabelElement>;
         const categoryInputs = document.querySelectorAll(`.${pos}__item input`) as NodeListOf<HTMLInputElement>;
-        
+
         categoryInputs.forEach(item => {
             item.checked = false;
         })
 
         queryPos.forEach(query => {
             categoryLabels.forEach(item => {
-                if(item.innerHTML === query) {
+                if (item.innerHTML === query) {
                     (item.previousElementSibling as HTMLInputElement).checked = true;
                 }
             })
@@ -187,26 +187,26 @@ const MainProducts = () => {
     useEffect(() => {
         changeDomStateOfCategoryOrBrandItems('brand', brandQuery);
     }, [brandQuery]);
-    
-   
+
+
     const visibleProducts = () => {
-        const sliderQuery =   {
+        const sliderQuery = {
             minPrice: +minPriceQuery,
             maxPrice: +maxPriceQuery,
             minStock: +minStockQuery,
             maxStock: +maxStockQuery
-           }
+        }
         return updateStock
-              (updatePrice
-              (updateCategory
-              (updateBrand
-              (searchProducts
-              (sortProducts (products, sortQuery), 
-                                       postQuery),
-                                       brandQuery),
-                                       categoryQuery), 
-                                       sliderQuery), 
-                                       sliderQuery);
+            (updatePrice
+                (updateCategory
+                    (updateBrand
+                        (searchProducts
+                            (sortProducts(products, sortQuery),
+                                postQuery),
+                            brandQuery),
+                        categoryQuery),
+                    sliderQuery),
+                sliderQuery);
     }
 
     useEffect(() => {

@@ -23,7 +23,6 @@ export interface ICard {
     key?: number,
     objProduct: IProduct,
     widthCard?: number,
-    idNOMER2?:number
 }
 
 export interface IDataFilter {
@@ -36,17 +35,4 @@ export interface IDataSlider {
     maxPrice: number,
     minStock: number,
     maxStock: number
-}
-
-export interface IQuery {
-    querySearchPanel: string,
-    querySort: string,
-    queryCategory: (string | undefined)[],
-    queryBrand: (string | undefined)[],
-    querySlider: {
-        minPrice: number,
-        maxPrice: number,
-        minStock: number,
-        maxStock: number
-    }
 }

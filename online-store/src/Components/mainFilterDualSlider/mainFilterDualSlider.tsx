@@ -97,19 +97,6 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
         return ascArray;
     }
 
-    
-    // function uniqueObjByPos(){
-    //     const flags = {};
-    //     const uniquePos = products.filter(item => {
-    //         if (flags[item[pos as keyof IProduct]]) {
-    //             return false;
-    //         }
-    //         flags[item[pos as keyof IProduct]] = true;
-    //         return true;
-    //     });
-    //     return uniquePos;
-    // }
-
     function fillBetweenInputs(){
         return {
             'background' : `linear-gradient(
@@ -131,7 +118,7 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
             setMaxSliderValue(100);
         } else {
             setMinSliderValue(minEl[0].id);
-            setMaxSliderValue(maxEl[0].id);
+            setMaxSliderValue(maxEl[maxEl.length-1].id);
         }
     },[minValue, maxValue]);
 

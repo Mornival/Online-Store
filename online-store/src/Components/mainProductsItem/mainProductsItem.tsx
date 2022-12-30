@@ -1,7 +1,7 @@
 import {useState, useContext, useEffect} from 'react';
 import './mainProductsItem.scss';
 import ContextCart from '../context/contextCart';
-import { ICard, IProduct } from '../../types/types';
+import { ICard } from '../../types/types';
 
 
 const MainProductsItem = ({objProduct, widthCard }: ICard) => {
