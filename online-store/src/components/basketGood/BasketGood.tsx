@@ -1,66 +1,24 @@
 import { IProduct } from "../../types/types";
-import React, { useState , useContext, useEffect} from 'react';
+import React, { useState , useContext} from 'react';
 import { DescriptionContext } from "../context/OtherContexts";
-import './BasketGood.scss';
-import contextCart from "../context/contextCart";
-import { ICard } from "../../types/types";
-import { Link } from 'react-router-dom';
-import  contextProducts from '../context/contextProducts'
+import './BasketGood.scss'
 interface PropsProduct{
-    product: IProduct,
-    productId: number,
-    id: number,
-    number: number
+    product: IProduct
 }
 
 function BasketGood(props: PropsProduct){
-    const [dataId, setDataId] = useState(0);
     let { setDescrition } = useContext(DescriptionContext);
-    const { dataCart, setDataCart} = useContext(contextCart);
-    const selectedProducts: IProduct[] = dataCart.map(item => item.objProduct);
     const clickImage = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
-        console.log(dataId);
+        console.log(e);
         if(setDescrition) setDescrition();
-        console.log()
     }
-    const addInCart = function(){
-        const arr = [...dataCart];
-        let numberOfGood: number = 0;
-        for(let i: number = 0; i < arr.length; i++){
-            if(dataId === arr[i].objProduct.id){
-                numberOfGood = i;
-                break;
-            }
-        }
-        arr.push(arr[numberOfGood]);
-        setDataCart(arr);
-    }
-    useEffect(function(){
-        setDataId(props.product.id);
-    },[dataCart]);
-    const minusInCart = function(){
-        const arr = [...dataCart];
-        let numberOfDeleted: number = 0;
-        let b: ICard[] = [];
-        for(let i = arr.length - 1; i >= 0; i--){
-            if(dataId === arr[i].objProduct.id){
-                numberOfDeleted = i;
-                break;
-            }
-        }
-        setDataCart(arr.filter((product , index)=>{
-            if(index === numberOfDeleted){
-                return false;
-            }
-            return true;
-        }));
-    }
+    const [numberOfGoods, setNumberOfGoods] = useState(1);
     return(
         <div className = "good-body">
-            <div className="good-id">{props.id + 1}</div>
+            <div className="good-id">{props.product.id}</div>
             <div className = "good-image" onClick={clickImage}>
-                <Link to = {`/details/${props.productId}`}><img src = {props.product.thumbnail} alt = "good"/></Link>
+                <img src = {props.product.images[0]} alt = "good"/>
             </div>
             <div className = "good-info">
                 <h2>{props.product.title}</h2>
@@ -73,11 +31,11 @@ function BasketGood(props: PropsProduct){
             <div className = "good-other-info">
                 <h2 className = "good-other-info__h2">Stock: {props.product.stock}</h2>
                 <div className="good-amount">
-                    <div className = "good-amount__plus" onClick={addInCart}>+</div>
-                    <h2 className = "good-amount__amount">{props.number}</h2>
-                    <div className = "good-amount__minus" onClick={minusInCart} >-</div>
+                    <div className = "good-amount__plus" onClick={function(){if(numberOfGoods !== props.product.stock) setNumberOfGoods(numberOfGoods + 1)}}>+</div>
+                    <h2 className = "good-amount__amount">{numberOfGoods}</h2>
+                    <div className = "good-amount__minus" onClick={function(){if(numberOfGoods > 1) setNumberOfGoods(numberOfGoods - 1)}} >-</div>
                 </div>
-                <h2 className = "money-price">€{props.product.price * props.number}</h2>
+                <h2 className = "money-price">€{props.product.price * numberOfGoods}</h2>
             </div>
         </div>
     )

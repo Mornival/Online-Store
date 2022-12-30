@@ -24,16 +24,6 @@
     &:first-child{
         cursor:pointer;
         margin-left:0px;
-        a{
-            text-decoration: none;
-            color:lightgrey;
-        }
-        &:hover{
-            opacity:0.6;
-        }
-        &:active{
-            opacity:0.3;
-        }
     }
 }
 .description-body{
@@ -118,10 +108,7 @@
         border:3px solid grey;
         border-radius:10px;
         background:lightgrey;
-        a{
-            text-decoration: none;
-            color:#181a1c;
-        }
+        color:#181a1c;
         &:hover{
             opacity:0.6;
         }

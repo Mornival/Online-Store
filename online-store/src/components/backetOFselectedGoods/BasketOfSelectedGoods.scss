@@ -60,14 +60,6 @@
                         opacity:0.5;
                     }
                 }
-                &:nth-child(3){
-                    text-align:center;
-                    width:70px;
-                    margin-left:5px;
-                }
-                input{
-                    text-align:right;
-                }
             }
         }
     }
@@ -89,19 +81,4 @@
         font-size:2rem;
         border-bottom:3px solid  grey;
     }
-}
-.empty-div{
-    position:relative;
-    margin-left:calc(50% - 150px);
-    width:350px;
-    padding:15px;
-    text-align:center;
-    margin-top:20px;
-    border-radius:20px;
-    border:2px solid #181a1c;
-    background-color:#181a1c;
-}
-.empty-h2{
-    font-size:3.2rem;
-    color: lightgrey;
 }

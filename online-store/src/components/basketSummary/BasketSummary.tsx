@@ -2,7 +2,6 @@ import './BasketSummary.scss'
 import { useContext } from 'react';
 import { IProduct } from '../../types/types';
 import ModalContext from '../context/OtherContexts';
-import contextCart from '../context/contextCart';
 
 interface PropsProds{
     prods: IProduct[];
@@ -11,15 +10,17 @@ function BasketSummary(props: PropsProds){
     let prodsNumber: number = 0;
     let prodsAmount: number = 0;
     let { setModal } = useContext(ModalContext);
-    const { dataCart } = useContext(contextCart);
-    prodsNumber = dataCart.length;
-    prodsAmount = dataCart.reduce((acum,cur) => acum + cur.objProduct.price,0)
     const clickButton = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if(setModal){
             setModal();
         }
     }
+    let k: NodeListOf<Element> = document.querySelectorAll('.money-price');
+    (k.forEach((v) => {
+        prodsNumber++;
+        prodsAmount += +v.innerHTML.substring(1,v.innerHTML.length);
+    }));
     return(
         <>
         <div className = "summary-body">
