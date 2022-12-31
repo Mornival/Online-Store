@@ -17,7 +17,7 @@ import qs from 'qs';
 const MainProducts = () => {
     const { products } = defaultDataProducts;
     const [ widthCard, setWidthCard] = useState(350);
-    const { setDataProducts } = useContext(contextProducts);
+    const { dataProducts, setDataProducts } = useContext(contextProducts);
     const { dataFilter } = useContext(ContextFilter);
     const { dataBrand, dataCategory } = dataFilter;
     const { dataSlider } = useContext(ContextSlider);
@@ -27,7 +27,7 @@ const MainProducts = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const buttonQuery = searchParams.get('button') || '350';
     const postQuery = searchParams.get('post') || '';
-    const sortQuery = searchParams.get('sort') || '';
+    const sortQuery = searchParams.get('sort') || 'price-ASC';
     const categoryQuery = searchParams.get('category')?.split('|') || [];
     const brandQuery = searchParams.get('brand')?.split('|') || [];
     const minPriceQuery = searchParams.get('minPrice') || '10';
@@ -188,7 +188,6 @@ const MainProducts = () => {
         changeDomStateOfCategoryOrBrandItems('brand', brandQuery);
     }, [brandQuery]);
 
-
     const visibleProducts = () => {
         const sliderQuery = {
             minPrice: +minPriceQuery,
@@ -211,7 +210,7 @@ const MainProducts = () => {
 
     useEffect(() => {
         setDataProducts(dataProducts => visibleProducts());
-    }, [postQuery, sortQuery, dataBrand, dataCategory, dataSlider, minPriceQuery, maxPriceQuery, maxStockQuery, minStockQuery]);
+    }, [window.location.search]);
 
     return (
         <div className="products">

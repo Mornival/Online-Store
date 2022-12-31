@@ -9,7 +9,7 @@ import MainFooter from './Components/mainFooter/mainFooter';
 import BasketOfGoods from './Components/backetOFselectedGoods/BasketOfSelectedGoods';
 import { defaultDataProducts } from './data/data';
 import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
-import Page404 from './Components/page404/Page404';
+import Page404 from './Components/Page404/Page404';
 import ProductDescription from './Components/productDescriptionPage/ProductDescriptionPage';
 import './App.scss';
 

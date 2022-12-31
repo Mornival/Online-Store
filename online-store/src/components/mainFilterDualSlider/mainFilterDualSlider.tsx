@@ -125,7 +125,7 @@ const MainFilterDualSlider = ({ title, minValue, maxValue }: ISlider) => {
 
 
     return (
-        <div onMouseUp={onUpdateSliderFilters} className='slider'> 
+        <div onMouseUp={onUpdateSliderFilters} className={`slider ${pos}`}> 
             <h3 className="slider__title">{title}</h3>
             <hr />
             {minSlider === 0 || maxSlider === 0?
