@@ -1,4 +1,4 @@
-import './Page404.scss'
+import './page404.scss'
 
 function Page404(){
     return (
