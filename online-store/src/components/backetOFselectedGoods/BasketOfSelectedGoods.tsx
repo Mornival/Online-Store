@@ -15,12 +15,22 @@ interface ICart {
 
 function BasketOfGoods() {
     let { modal } = useContext(ModalContext);
-    const { dataCart } = useContext(ContextCart);
+    const { dataCart ,setDataCart} = useContext(ContextCart);
     const [searchParams, setSearchParams] = useSearchParams();
     let numberInput: string|null = searchParams.get('input');
     if(numberInput === null){
         numberInput = "";
     }
+    // if(dataCart.length !== 0){
+    //     localStorage.setItem('dataCart',JSON.stringify(dataCart));
+    // }
+    // if(dataCart.length === 0){
+    //     let local: string|null = localStorage.getItem('dataCart');
+    //     if(local !== null){
+    //         console.log(JSON.parse(local));
+    //         setDataCart(JSON.parse(local));
+    //     }
+    // }
     let numberPage: string = searchParams.get('page') || '1';
     const cart: ICart[] = dataCart;
     const selectedProducts: IProduct[] = cart.map(item => item.objProduct);
