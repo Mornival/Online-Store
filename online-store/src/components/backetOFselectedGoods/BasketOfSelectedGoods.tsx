@@ -15,7 +15,7 @@ interface ICart {
 
 function BasketOfGoods() {
     let { modal } = useContext(ModalContext);
-    const { dataCart ,setDataCart} = useContext(ContextCart);
+    const { dataCart , setDataCart} = useContext(ContextCart);
     const [searchParams, setSearchParams] = useSearchParams();
     let numberInput: string|null = searchParams.get('input');
     if(numberInput === null){
