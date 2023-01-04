@@ -11,6 +11,7 @@ function ProductDescription(propss: PropsDescription){
     const id = useParams();
     let numberId: number = 0;
     let props: IProduct = propss.products[0];
+    const [currentImageSrc, setCurrentImageSrc] = useState("");
     const { dataCart ,setDataCart} = useContext(ContextCart);
     let hasProductInCart: boolean = false;
     if(id.id){
@@ -59,6 +60,9 @@ function ProductDescription(propss: PropsDescription){
             setModal();
         }
     }
+    const clickImage = (e: React.MouseEvent<HTMLImageElement>) =>{
+        setCurrentImageSrc(e.currentTarget.currentSrc);
+    }
     return(
     <div className="description-container">
         <div className="description-top">
@@ -73,9 +77,9 @@ function ProductDescription(propss: PropsDescription){
         <h2 className="description-name">{props.title}</h2>
         <div className="description-body">
             <div className="description-images">
-                {props.images.map((v,i) => <img className="description-images__image"src={v} key={i}/>)}
+                {props.images.map((v,i) => <img className="description-images__image" src={v} alt="good" key={i} onClick={clickImage}/>)}
             </div>
-            <div className ="description-main-image"><img src={props.thumbnail}/></div>
+            <div className ="description-main-image"><img src={currentImageSrc || props.thumbnail}/></div>
             <div className="description-data">
                 <div className="description-data__item">
                     <h2>Description</h2>
