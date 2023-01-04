@@ -3,40 +3,63 @@ import { IProduct } from '../../types/types';
 import React, { useState , useContext } from 'react';
 import ModalContext,{DescriptionContext} from '../context/OtherContexts';
 import { Link , useParams } from 'react-router-dom';
+import ContextCart from '../context/contextCart';
 interface PropsDescription{
     products: IProduct[];
 }
 function ProductDescription(propss: PropsDescription){
     const id = useParams();
-    let b: number = 0;
+    let numberId: number = 0;
     let props: IProduct = propss.products[0];
-    console.log(id.id);
+    const { dataCart ,setDataCart} = useContext(ContextCart);
+    let hasProductInCart: boolean = false;
     if(id.id){
-         b = (+id.id);
+         numberId = (+id.id);
     }
     for(let i: number = 0; i < propss.products.length; i++){
-        // console.log(propss.products[i].id);
-        // console.log(b);
-        if(b === propss.products[i].id){
+        if(numberId === propss.products[i].id){
             props = propss.products[i];
             break;
         }
     }
-    console.log(props);
-    // const [image, setImage] = useState(0);
+    dataCart.forEach((v) => {
+        if(v.objProduct.id === numberId){
+            hasProductInCart = true;
+        }
+    })
+    const [hasInCart, SetHasInCart] = useState(hasProductInCart);
     let {modal, setModal} = useContext(ModalContext);
     let {open, setDescrition} = useContext(DescriptionContext);
+    const clickDrop = (e: React.MouseEvent) => {
+        const arr = dataCart.filter((v , i) => {
+            if(props.id !== dataCart[i].objProduct.id){
+                return v;
+            }
+        });
+        SetHasInCart(false);
+        console.log(arr);
+        setDataCart(arr);
+    }
+    const clickAdd = (e: React.MouseEvent) => {
+        const arr = [...dataCart];
+        arr.push({objProduct: props})
+        SetHasInCart(true);
+        setDataCart(arr);
+    }
     const clickBuy = (e: React.MouseEvent) => {
-        e.preventDefault();
-        console.log(e);
         if(setModal && !modal){
+            setModal();
+        }
+    }
+    const clickStore = (e: React.MouseEvent) => {
+        if(setModal && modal){
             setModal();
         }
     }
     return(
     <div className="description-container">
         <div className="description-top">
-            <p className="description-top-p"><Link to="/">store</Link></p>
+            <p className="description-top-p"><Link to="/" onClick={clickStore}>store</Link></p>
             <p className="description-top-p">&gt;&gt;&gt;</p>
             <p className="description-top-p">{props.category}</p>
             <p className="description-top-p">&gt;&gt;&gt;</p>
@@ -78,7 +101,8 @@ function ProductDescription(propss: PropsDescription){
             </div>
             <form className="description-buy">
                 <h2>€{props.price}</h2>
-                <button className="description-button" type="button">DROP FROM CART</button>
+                {hasInCart && <button className="description-button" type="button" onClick={clickDrop}>DROP FROM CART</button>}
+                {!hasInCart && <button className="description-button" type="button" onClick={clickAdd}>ADD TO CART</button>}
                 <button className="description-button" type="button"  onClick={clickBuy}><Link to="/basket">BUY NOW</Link></button>
             </form>
         </div>
