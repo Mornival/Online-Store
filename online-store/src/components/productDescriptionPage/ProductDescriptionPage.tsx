@@ -37,21 +37,24 @@ function ProductDescription(propss: PropsDescription){
             }
         });
         SetHasInCart(false);
-        console.log(arr);
         setDataCart(arr);
     }
-    const clickAdd = (e: React.MouseEvent) => {
+    const clickAdd = () => {
         const arr = [...dataCart];
         arr.push({objProduct: props})
         SetHasInCart(true);
         setDataCart(arr);
     }
-    const clickBuy = (e: React.MouseEvent) => {
+    const clickBuy = () => {
+        console.log(hasInCart);
+        if(!hasInCart){
+            clickAdd();
+        }
         if(setModal && !modal){
             setModal();
         }
     }
-    const clickStore = (e: React.MouseEvent) => {
+    const clickStore = () => {
         if(setModal && modal){
             setModal();
         }
