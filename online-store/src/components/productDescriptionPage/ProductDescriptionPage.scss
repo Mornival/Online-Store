@@ -107,6 +107,10 @@
         font-size:3rem;
         text-align:center;
     }
+    a{
+        text-decoration: none;
+        color:#181a1c;
+    }
     .description-button{
         cursor:pointer;
         display: block;
@@ -118,10 +122,6 @@
         border:3px solid grey;
         border-radius:10px;
         background:lightgrey;
-        a{
-            text-decoration: none;
-            color:#181a1c;
-        }
         &:hover{
             opacity:0.6;
         }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState , useEffect} from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './BasketOfSelectedGoods.scss'
 import { IProduct } from '../../types/types';
@@ -17,20 +17,16 @@ function BasketOfGoods() {
     let { modal } = useContext(ModalContext);
     const { dataCart , setDataCart} = useContext(ContextCart);
     const [searchParams, setSearchParams] = useSearchParams();
+    let local: string|null = localStorage.getItem('dataCart');
+    if (local !== null && dataCart.length === 0) {
+        if(local.length > 2){
+            setDataCart(JSON.parse(local));
+        }
+    }
     let numberInput: string|null = searchParams.get('input');
     if(numberInput === null){
         numberInput = "";
     }
-    // if(dataCart.length !== 0){
-    //     localStorage.setItem('dataCart',JSON.stringify(dataCart));
-    // }
-    // if(dataCart.length === 0){
-    //     let local: string|null = localStorage.getItem('dataCart');
-    //     if(local !== null){
-    //         console.log(JSON.parse(local));
-    //         setDataCart(JSON.parse(local));
-    //     }
-    // }
     let numberPage: string = searchParams.get('page') || '1';
     const cart: ICart[] = dataCart;
     const selectedProducts: IProduct[] = cart.map(item => item.objProduct);
@@ -79,6 +75,8 @@ function BasketOfGoods() {
     }
     const pageChange = () => {
         let resultNumber:number = 0;
+        cartGoods = uniqueObjByPos();
+        numberOfGoods = cartGoods.length;
         numberInput = searchParams.get('input');
         if(numberInput === null || +numberInput === 0){
             resultNumber = numberOfGoods;
@@ -87,6 +85,10 @@ function BasketOfGoods() {
         }
         while(+numberPage !== 1 && +numberPage > Math.ceil(numberOfGoods/resultNumber)){
             numberPage = Math.ceil(numberOfGoods/resultNumber).toString();
+            const queryString = window.location.search.substring(1);
+            const queryObj = qs.parse(queryString);
+            searchParams.set('page',numberPage);
+            setSearchParams({ ...queryObj, page: numberPage});
         }
     }
     const pageChangeMinus = () => {
@@ -102,7 +104,12 @@ function BasketOfGoods() {
         let numberItems: string = searchParams.get('input') || numberOfGoods.toString();
         return cartGoods.map((product, index) => {
             if(index + +numberItems >= +numberItems * (+numberPage * 1) && index < +numberItems * +numberPage){
-                console.log(index);
+                if(numbersOfGoods[product.id] > product.stock){
+                    numbersOfGoods[product.id] = product.stock;
+                    const arr = [...dataCart];
+                    arr.pop();
+                    setDataCart(arr);
+                }
                 return <BasketGood product={product}
                 productId={product.id}
                 id={index}
@@ -112,6 +119,9 @@ function BasketOfGoods() {
         }
         )
     }
+    useEffect(() => {
+        pageChange();
+    }, [dataCart,window.location.search])
     return (
         <>{!selectedProducts.length && <div className="empty-div"><h2 className="empty-h2">Cart is empty</h2></div>}
             {!!selectedProducts.length &&
@@ -137,4 +147,4 @@ function BasketOfGoods() {
         </>
     )
 }
-export default BasketOfGoods
+export default BasketOfGoods;

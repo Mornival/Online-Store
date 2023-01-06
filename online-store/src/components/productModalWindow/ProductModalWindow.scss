@@ -1,5 +1,6 @@
 .modal-outbody{
     position:fixed;
+    z-index:2;
     width:100%;
     height:100%;
     top:0;
@@ -9,12 +10,43 @@
 .modal-body{
     position:fixed;
     top:50px;
+    z-index:3;
     margin-left:calc(50% - 450px);
     min-width:900px;
-    height:700px;
+    min-height:700px;
     border-radius:20px;
     border:3px solid grey;
     background:#181a1c;
+    .error-message{
+        width:60%;
+        margin-left:0%;
+        height:100%;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        font-size:1.5rem;
+        color:red;
+    }
+    .error-message-block{
+        width:80%;
+        margin-left:10%;
+        margin-top:10px;
+        height:100%;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        font-size:1.5rem;
+        color:red;
+    }
+    p{
+        width:80%;
+        margin-left:10%;
+        color:lightgrey;
+        font-size:1.5rem;
+        text-align:center;
+        margin-top:10px;
+        margin-bottom:5px;
+    }
     h2{
         margin-top:10px;
         text-align:center;
@@ -31,7 +63,6 @@
         height:40px;
         width:80%;
         margin-left:10%;
-        margin-top:10px;
     }
     .input{
         display: block;
@@ -39,11 +70,14 @@
         width:100%;
         height:40px;
         border-radius:10px;
-        font-size:1.5rem;
+        font-size:1.4rem;
         text-align:center;
         &:focus{
             outline:none;
         }
+    }
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
     }
     .card-info{
         position:relative;
@@ -55,18 +89,19 @@
         border-radius:10px;
         border: 3px solid grey;
         p{
+            all:initial;
             font-size:2rem;
             color:lightgrey;
             user-select:none;
         }
         .p-cvv{
             position:absolute;
-            top:140px;
+            top:160px;
             margin-left:60%;
         }
         .p-valid{
             position:absolute;
-            top:140px;
+            top:160px;
             margin-left:10%;
         }
     }  
@@ -74,12 +109,25 @@
         position:absolute;
     }
     .card-number{
-        top:360px;
-        width:70%;
-        margin-left:15%;
+        top:510px;
+        width: 43%;
+        margin-left:35%;
+    }
+    .card-logo{
+        position:absolute;
+        width:72px;
+        height:72px;
+        margin-left:10%;
+        top:24px;
+        background:lightgrey;
+        border-radius:10px;
+        img{
+            height:100%;
+            border-radius:10px;
+        }
     }
     .cvv, .valid{
-        top:480px;
+        top:630px;
     }
     .valid{
         width:20%;
@@ -100,12 +148,19 @@
         width:40%;
     }
 }
-.error-message{
-    width:100%;
-    height:100%;
-    display: flex;
-    justify-content: center;
-    align-items:center;
-    font-size:1.5rem;
-    color:red;
+.end-shop-div{
+    position:fixed;
+    z-index:4;
+    margin-left:calc(50% - 250px);
+    width:500px;
+    padding:15px;
+    text-align:center;
+    top:150px;
+    border-radius:20px;
+    border:2px solid #181a1c;
+    background-color:#181a1c;
+}
+.end-shop-h2{
+    font-size:3.2rem;
+    color: lightgrey;
 }

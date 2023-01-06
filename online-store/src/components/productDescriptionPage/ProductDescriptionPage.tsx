@@ -48,10 +48,12 @@ function ProductDescription(propss: PropsDescription){
     }
     const clickBuy = () => {
         console.log(hasInCart);
+        console.log('modal ' + modal);
         if(!hasInCart){
             clickAdd();
         }
         if(setModal && !modal){
+            console.log("Ass we c an");
             setModal();
         }
     }
@@ -110,7 +112,7 @@ function ProductDescription(propss: PropsDescription){
                 <h2>€{props.price}</h2>
                 {hasInCart && <button className="description-button" type="button" onClick={clickDrop}>DROP FROM CART</button>}
                 {!hasInCart && <button className="description-button" type="button" onClick={clickAdd}>ADD TO CART</button>}
-                <button className="description-button" type="button"  onClick={clickBuy}><Link to="/basket">BUY NOW</Link></button>
+                <Link to="/basket"><button className="description-button" type="button"  onClick={clickBuy}>BUY NOW</button></Link>
             </form>
         </div>
     </div>

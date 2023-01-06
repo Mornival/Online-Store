@@ -1,34 +1,29 @@
 import './mainFooter.scss';
-import { useEffect, useContext , useState } from 'react';
-import ContextCart from '../context/contextCart';
-
-interface IDataStyle  {
-    [index:string]:string
-}
+import { useEffect } from 'react';
 
 const MainFooter = () => {
-    const url = window.location.pathname;
-    const [dataStyle, setDataStyle] = useState<IDataStyle>({});
-    const {dataCart} = useContext(ContextCart);
-    function changeDataStyle():void {
-        const HREF = window.location.href;
-        const goods = document.querySelectorAll(".good-body");
-        if(HREF.includes('basket') && goods.length <= 6) {
-            setDataStyle({
-                'position':'absolute',
-                'width': '100%',
-                'bottom':'0'
-            });
+    const path = window.location.pathname;
+
+    function resizeFooter() {
+        const footer = document.querySelector('.footer') as HTMLElement;
+        const page404 = document.querySelector('.page404-div') as HTMLElement;
+        if (window.innerHeight - 24 > document.body.scrollHeight || !page404) {
+            footer.style.position = `absolute`;
+            footer.style.bottom = `0`;
         } else {
-            setDataStyle({});
+            footer.style.position = 'relative';
         }
     }
-    useEffect(()=>{
-        changeDataStyle();
-    },[dataCart,url]);
-    
+
+    window.onclick = () => {
+        let intervalId;
+        clearInterval(intervalId);
+        resizeFooter();
+        intervalId = setInterval(resizeFooter, 100);
+    }
+
     return (
-        <footer style={dataStyle} className='footer'>
+        <footer className='footer'>
             Online Store 2022 Grushevskiy & Eroshenko &copy;
         </footer>
     );
