@@ -15,16 +15,21 @@ const MainProductsItem = ({objProduct, widthCard , idCard }: ICard) => {
     const textButtonDrop = widthCard === 210 ? 'DROP' : 'DROP FROM CART';
 
     function onAddCart() {
+        let arr: ICard[] = [];
         if (buttonState) {
+            arr = [...dataCart, {objProduct}];
             setDataCart([...dataCart, {objProduct}]);
         } else {
             dataCart.find(({objProduct}: ICard) => {
                 if (objProduct.id === id) {
+                    arr = dataCart.filter(({objProduct}: ICard) => objProduct.id !== id);
                     setDataCart(dataCart.filter(({objProduct}: ICard) => objProduct.id !== id));
                 }
             })
         }
         setButtonState(buttonState => !buttonState);
+        console.log(arr);
+        localStorage.setItem('dataCart',JSON.stringify(arr));
     }
 
     useEffect(() => {

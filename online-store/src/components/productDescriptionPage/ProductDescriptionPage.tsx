@@ -39,12 +39,14 @@ function ProductDescription(propss: PropsDescription){
             }
         });
         SetHasInCart(false);
+        localStorage.setItem('dataCart',JSON.stringify(arr));
         setDataCart(arr);
     }
     const clickAdd = () => {
         const arr = [...dataCart];
         arr.push({objProduct: props})
         SetHasInCart(true);
+        localStorage.setItem('dataCart',JSON.stringify(arr));
         setDataCart(arr);
     }
     const clickBuy = () => {

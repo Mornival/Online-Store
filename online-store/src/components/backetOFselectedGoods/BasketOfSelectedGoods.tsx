@@ -130,7 +130,7 @@ function BasketOfGoods() {
                         <div className="basket-carts__top">
                             <h2 className="basket-carts__top__item">Products in Cart</h2>
                             <p className="basket-carts__top__item">ITEMS:</p>
-                            <input className="basket-carts__top__item" type="text" value={numberInput} onInput={(event) => inputChange(event)} />
+                            <input className="basket-carts__top__item" type="text" value={numberInput} placeholder='1' onInput={(event) => inputChange(event)} />
                             <p className="basket-carts__top__item">PAGE:</p>
                             <div className="basket-carts__top__item" onClick={() => pageChangeMinus()}>&lt;</div>
                             <p className="basket-carts__top__item">{numberPage}</p>

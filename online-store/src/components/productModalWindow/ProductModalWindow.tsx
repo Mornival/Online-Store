@@ -189,6 +189,7 @@ function ProductModal() {
         if (setModal) {
             setModal();
             setEndShop(false);
+            localStorage.setItem('dataCart',JSON.stringify([]));
             setDataCart([]);
         }
     }
