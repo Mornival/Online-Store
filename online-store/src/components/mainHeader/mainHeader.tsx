@@ -1,26 +1,18 @@
 import './mainHeader.scss';
 import cartImage from './cart.png';
 import logoImage from './packet.svg';
-import { useContext, useEffect} from 'react';
+import { useContext} from 'react';
 import ContextCart from '../context/contextCart';
 import { ICard } from '../../types/types';
 import { Link } from 'react-router-dom';
 
 const MainHeader = () => {
-    const {dataCart , setDataCart} = useContext(ContextCart);
-    let local: string|null = localStorage.getItem('dataCart');
-    if (local !== null && dataCart.length === 0) {
-        if(local.length > 2){
-            setDataCart(JSON.parse(local));
-        }
-    }
+    const {dataCart} = useContext(ContextCart);
     const sumCartTotal = dataCart.reduce(
         (accumulator: number, {objProduct}: ICard) => accumulator + objProduct.price,
         0
     );
-    useEffect(() => {
-        localStorage.setItem('dataCart',JSON.stringify(dataCart));
-    },[dataCart])
+
     return (
         <header className='header'>
             <div className="container">
