@@ -1,4 +1,5 @@
 .footer{
+    width: 100%;
     height: 100px;
     background-color: #181a1c;
     margin-top: 20px;
@@ -7,4 +8,5 @@
     align-items: center;
     font-size: 28px;
     color: lightgrey;
+    flex-shrink: 0;
 }
