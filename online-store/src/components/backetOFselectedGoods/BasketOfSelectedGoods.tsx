@@ -17,12 +17,6 @@ function BasketOfGoods() {
     let { modal } = useContext(ModalContext);
     const { dataCart , setDataCart} = useContext(ContextCart);
     const [searchParams, setSearchParams] = useSearchParams();
-    // let local: string|null = localStorage.getItem('dataCart');
-    // if (local !== null && dataCart.length === 0) {
-    //     if(local.length > 2){
-    //         setDataCart(JSON.parse(local));
-    //     }
-    // }
     let numberInput: string|null = searchParams.get('input');
     if(numberInput === null){
         numberInput = "";
