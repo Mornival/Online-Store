@@ -34,7 +34,6 @@ function BasketGood(props: PropsProduct){
             }
         }
         arr.push(arr[numberOfGood]);
-        localStorage.setItem('dataCart',JSON.stringify(arr));
         setDataCart(arr);
     }
     useEffect(function(){
@@ -56,7 +55,6 @@ function BasketGood(props: PropsProduct){
             }
             return true;
         })
-        localStorage.setItem('dataCart',JSON.stringify(arrb));
         setDataCart(arrb);
     }
     return(
