@@ -101,8 +101,11 @@
 }
 
 .description-buy{
+    width:20%;
+    margin-left:calc(10% - 75px);
     h2{
         margin-top:50px;
+        width:150px;
         color:lightgrey;
         font-size:3rem;
         text-align:center;
