@@ -35,6 +35,8 @@ const MainProducts = () => {
     const minStockQuery = searchParams.get('minStock') || '2';
     const maxStockQuery = searchParams.get('maxStock') || '150';
 
+    products.forEach((item, i) => { item.id = i + 1; });
+    
     function changeSize(size: number): void {
         setWidthCard(size);
         const queryString = window.location.search.substring(1);

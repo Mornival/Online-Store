@@ -5,6 +5,7 @@ import './BasketGood.scss';
 import contextCart from "../context/contextCart";
 import { ICard } from "../../types/types";
 import { Link } from 'react-router-dom';
+import defaultImage from '../mainHeader/cart.png'
 import  contextProducts from '../context/contextProducts'
 interface PropsProduct{
     product: IProduct,
@@ -22,7 +23,6 @@ function BasketGood(props: PropsProduct){
         e.preventDefault();
         console.log(dataId);
         if(setDescrition) setDescrition();
-        console.log()
     }
     const addInCart = function(){
         const arr = [...dataCart];
@@ -34,6 +34,7 @@ function BasketGood(props: PropsProduct){
             }
         }
         arr.push(arr[numberOfGood]);
+        localStorage.setItem('dataCart',JSON.stringify(arr));
         setDataCart(arr);
     }
     useEffect(function(){
@@ -42,19 +43,21 @@ function BasketGood(props: PropsProduct){
     const minusInCart = function(){
         const arr = [...dataCart];
         let numberOfDeleted: number = 0;
-        let b: ICard[] = [];
+        let arrb: ICard[] = [];
         for(let i = arr.length - 1; i >= 0; i--){
             if(dataId === arr[i].objProduct.id){
                 numberOfDeleted = i;
                 break;
             }
         }
-        setDataCart(arr.filter((product , index)=>{
+        arrb = arr.filter((product , index)=>{
             if(index === numberOfDeleted){
                 return false;
             }
             return true;
-        }));
+        })
+        localStorage.setItem('dataCart',JSON.stringify(arrb));
+        setDataCart(arrb);
     }
     return(
         <div className = "good-body">

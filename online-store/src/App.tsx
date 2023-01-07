@@ -48,6 +48,13 @@ function App() {
   const [minPrice, maxPrice]: number[] = prices.length ? [Math.min(...prices), Math.max(...prices)] : [0, 0];
   const [minStock, maxStock]: number[] = stocks.length ? [Math.min(...stocks), Math.max(...stocks)] : [0, 0];
 
+  let local: string|null = localStorage.getItem('dataCart');
+  if (local !== null && dataCart.length === 0) {
+      if(local.length > 2){
+          setDataCart(JSON.parse(local));
+      }
+  }
+
   return (
     <ContextCart.Provider value={{ // context cart
       dataCart,
