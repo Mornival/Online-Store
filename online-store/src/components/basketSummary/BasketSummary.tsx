@@ -13,11 +13,9 @@ function BasketSummary(props: PropsProds){
     let { setModal } = useContext(ModalContext);
     const { dataCart } = useContext(contextCart);
     const [coef, setCoef] = useState(1);
-    const [addPromoBtn, setAddPromoBtn] = useState(false);
-    const [deletePromoBtn, setDeletePromoBtn] = useState(false);
     let promocods: string[] = ['RS','EPM'];
-    let findedPromocods: string[] = [];
-    let usedPromocods: string[] = [];
+    const [findedPromocods, setFindedPromocods] = useState<string[]>([]);
+    const [usedPromocods, setUsedPromocods] = useState<string[]>([]);
     prodsNumber = dataCart.length;
     const findSum = () =>{
         prodsAmount = dataCart.reduce((acum,cur) => acum + cur.objProduct.price * coef,0)
@@ -25,41 +23,55 @@ function BasketSummary(props: PropsProds){
     findSum();
     const checkPromocode = (event: React.FormEvent<HTMLInputElement>) => {
         let currentCode: string = event.currentTarget.value;
-        console.log(coef);
-        let newCoef: number = 1;
-        findedPromocods = [];
+        let arr: string[] = [...findedPromocods];
+        let arrb: string[] = [...usedPromocods];
         promocods.forEach((v , i , a) => {
-            console.log(currentCode.indexOf(v));
-            if(currentCode.indexOf(v) >= 0){
-                findedPromocods.push(v);
-                newCoef -= 0.1;
-            }
-            if(i === a.length - 1){
-                setCoef(newCoef);
-                console.log(coef);
-                findSum();
+            if(currentCode.indexOf(v) >= 0 && !arr.includes(v) && !arrb.includes(v)){
+                arr.push(v);
+            } else if(currentCode.indexOf(v) === -1 && arr.includes(v)){
+                arr = arr.filter((vv) => {
+                    if(vv === v){
+                        return false
+                    } else {
+                        return true;
+                    }
+                });
             }
         });
-        if(findedPromocods.length > 0){
-            setAddPromoBtn(true);
+        arr = arr.filter((v) => {
+            if(arr.includes(v) && arrb.includes(v)){
+                return false;
+            } else {
+                return true;
+            }
+        })
+        if(arr.length != findedPromocods.length){
+            setFindedPromocods(arr);
         }
-        console.log(findedPromocods);
     }
-    const addPromo = () =>{
-        usedPromocods.push(findedPromocods[0]);
-        findedPromocods.unshift();
-        if(findedPromocods.length === 0){
-            setAddPromoBtn(false);
-        }
-        setDeletePromoBtn(true);
+    const addPromo = () => {
+        let arrUsed: string[] = [...usedPromocods];
+        let arrFinded: string[] = [...findedPromocods];
+        arrUsed.push(findedPromocods[0]);
+        arrFinded.shift();
+        setUsedPromocods([...arrUsed]);
+        setFindedPromocods([...arrFinded]);
+        checkDiscount(arrUsed);
     }
-    const deletePromo = () =>{
-        findedPromocods.push(usedPromocods[0]);
-        usedPromocods.unshift();
-        if(usedPromocods.length === 0){
-            setDeletePromoBtn(false);
-        }
-        setAddPromoBtn(true);
+    const deletePromo = () => {
+        let arrUsed: string[] = [...usedPromocods];
+        let arrFinded: string[] = [...findedPromocods];
+        arrFinded.push(usedPromocods[0]);
+        arrUsed.shift();
+        setUsedPromocods([...arrUsed]);
+        setFindedPromocods([...arrFinded]);
+        checkDiscount(arrUsed);
+    }
+    const checkDiscount = (arrUsed: string[]) =>{
+        let discountCoef: number = 1;
+        discountCoef = 1 - (arrUsed.length/10);
+        console.log(discountCoef);
+        setCoef(discountCoef)
     }
     const clickButton = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -75,8 +87,8 @@ function BasketSummary(props: PropsProds){
             <form>
                 <input type = "text" placeholder="Enter promo code" onInput={(event) => checkPromocode(event)}/>
                 <p>Promo for test: 'RS', 'EPM'</p>
-                {addPromoBtn && <button onClick={clickButton} type = "button">add promo</button>}
-                {deletePromoBtn && <button onClick={clickButton} type = "button">delete promo</button>}
+                {findedPromocods.length > 0 && <button onClick={addPromo} type = "button">add promo</button>}
+                {usedPromocods.length > 0 && <button onClick={deletePromo} type = "button">delete promo</button>}
                 <button onClick={clickButton} type = "button">BUY NOW</button>
             </form>
         </div>
