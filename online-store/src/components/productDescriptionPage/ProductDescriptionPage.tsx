@@ -8,6 +8,13 @@ import { ICard } from '../../types/types';
 interface goodDescription{
     products: IProduct[];
 }
+const dropGood = function(data: ICard[],idGood: number){
+    return data.filter((v , i) => {
+        if(idGood !== data[i].objProduct.id){
+            return v;
+        }
+    });
+}
 function ProductDescription(goods: goodDescription){
     const id:Readonly<Params<string>> = useParams();
     let numberId: number = 0;
@@ -32,13 +39,6 @@ function ProductDescription(goods: goodDescription){
     })
     const [hasInCart, SetHasInCart] = useState(hasProductInCart);
     let {modal, setModal} = useContext(ModalContext);
-    const dropGood = function(data: ICard[],idGood: number){
-        return data.filter((v , i) => {
-            if(idGood !== data[i].objProduct.id){
-                return v;
-            }
-        });
-    }
     const clickDrop = (e: React.MouseEvent) => {
         const arr: ICard[] = dropGood(dataCart,good.id);
         SetHasInCart(false);
@@ -121,5 +121,5 @@ function ProductDescription(goods: goodDescription){
     </div>
     )
 }
-
+export {dropGood};
 export default ProductDescription

@@ -12,7 +12,7 @@ interface ICart {
     objProduct: IProduct
 }
 
-function BasketOfGoods() {
+function BasketOfGoods():JSX.Element {
     let { modal } = useContext(ModalContext);
     const { dataCart , setDataCart} = useContext(ContextCart);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -24,7 +24,7 @@ function BasketOfGoods() {
     const cart: ICart[] = dataCart;
     const selectedProducts: IProduct[] = cart.map(item => item.objProduct);
     let numbersOfGoods: { [index: number]: number };
-    function uniqueObjByPos(prods: IProduct[]) {
+    function uniqueObjByPos(prods: IProduct[]): IProduct[] {
         const unique: { [index: number]: number } = {};
         const uniquePos = prods.filter(item => {
             if (unique[item.id]) {
@@ -39,7 +39,7 @@ function BasketOfGoods() {
     }
     let cartGoods: IProduct[] = uniqueObjByPos(selectedProducts);
     let numberOfGoods: number = cartGoods.length;
-    const inputChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const inputChange = (event: React.FormEvent<HTMLInputElement>): void => {
         let numberInInput: string = event.currentTarget.value;
         numberInInput = numberInInput.replace(/\D/g,'');
         let numberResult = (+numberInInput).toString();
@@ -51,7 +51,7 @@ function BasketOfGoods() {
         searchParams.set('page',numberPage);
         setSearchParams({ page: numberPage, input: numberResult});
     }
-    const pageChangePlus = () => {
+    const pageChangePlus = (): void => {
         let resultNumber:number = 0;
         if(numberInput === null || +numberInput === 0){
             resultNumber = numberOfGoods;
@@ -66,7 +66,7 @@ function BasketOfGoods() {
             setSearchParams({ ...queryObj, page: numberPage});
         }
     }
-    const pageChange = () => {
+    const pageChange = (): void => {
         let resultNumber:number = 0;
         cartGoods = uniqueObjByPos(selectedProducts);
         numberOfGoods = cartGoods.length;
@@ -84,7 +84,7 @@ function BasketOfGoods() {
             setSearchParams({ ...queryObj, page: numberPage});
         }
     }
-    const pageChangeMinus = () => {
+    const pageChangeMinus = (): void => {
         if(+numberPage > 1){
             numberPage = (+numberPage - 1).toString();
             const queryString: string = window.location.search.substring(1);
@@ -93,7 +93,7 @@ function BasketOfGoods() {
             searchParams.set('page',numberPage);
         }
     }
-    const createListOfGoods = () => {
+    const createListOfGoods = ():(JSX.Element|undefined)[] => {
         let numberItems: string = searchParams.get('input') || numberOfGoods.toString();
         return cartGoods.map((product, index) => {
             if(index + +numberItems >= +numberItems * (+numberPage * 1) && index < +numberItems * +numberPage){

@@ -7,7 +7,16 @@ import contextCart from '../context/contextCart';
 interface PropsProds{
     prods: IProduct[];
 }
-function BasketSummary(props: PropsProds){
+const findSum = (data: ICard[],coef:number) =>{
+    let prodsAmount:number = data.reduce((acum,cur) => acum + cur.objProduct.price * coef,0);
+    return prodsAmount;
+}
+const checkDiscount = (arrUsed: string[]): number=> {
+    let discountCoef: number = 1;
+    discountCoef = 1 - (arrUsed.length/10);
+    return discountCoef;
+}
+function BasketSummary(prods: PropsProds): JSX.Element{
     let prodsNumber: number = 0;
     let prodsAmount: number = 0;
     let { setModal } = useContext(ModalContext);
@@ -17,10 +26,8 @@ function BasketSummary(props: PropsProds){
     const [findedPromocods, setFindedPromocods] = useState<string[]>([]);
     const [usedPromocods, setUsedPromocods] = useState<string[]>([]);
     prodsNumber = dataCart.length;
-    const findSum = (data: ICard[]) =>{
-        prodsAmount = data.reduce((acum,cur) => acum + cur.objProduct.price * coef,0)
-    }
-    findSum(dataCart);
+    prodsAmount = findSum(dataCart,coef);
+    console.log(dataCart);
     const checkPromocode = (event: React.FormEvent<HTMLInputElement>) => {
         let currentCode: string = event.currentTarget.value;
         let arr: string[] = [...findedPromocods];
@@ -49,16 +56,16 @@ function BasketSummary(props: PropsProds){
             setFindedPromocods(arr);
         }
     }
-    const addPromo = () => {
+    const addPromo = (): void => {
         let arrUsed: string[] = [...usedPromocods];
         let arrFinded: string[] = [...findedPromocods];
         arrUsed.push(findedPromocods[0]);
         arrFinded.shift();
         setUsedPromocods([...arrUsed]);
         setFindedPromocods([...arrFinded]);
-        checkDiscount(arrUsed);
+        setCoef(checkDiscount(arrUsed));
     }
-    const deletePromo = () => {
+    const deletePromo = (): void => {
         let arrUsed: string[] = [...usedPromocods];
         arrUsed.shift();
         let inputPromo: HTMLInputElement|null = document.querySelector('.promo-input');
@@ -66,12 +73,7 @@ function BasketSummary(props: PropsProds){
             inputPromo.value = '';
         }
         setUsedPromocods([...arrUsed]);
-        checkDiscount(arrUsed);
-    }
-    const checkDiscount = (arrUsed: string[]) => {
-        let discountCoef: number = 1;
-        discountCoef = 1 - (arrUsed.length/10);
-        setCoef(discountCoef)
+        setCoef(checkDiscount(arrUsed));
     }
     const clickButton = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -79,7 +81,7 @@ function BasketSummary(props: PropsProds){
             setModal();
         }
     }
-    const showUsedPromocods = () => {
+    const showUsedPromocods = (): JSX.Element[] => {
         return usedPromocods.map((v) => {
             return <p>'{v}':10%</p>;
         })
@@ -102,5 +104,5 @@ function BasketSummary(props: PropsProds){
         </>
     )
 }
-
+export {findSum, checkDiscount}
 export default BasketSummary;

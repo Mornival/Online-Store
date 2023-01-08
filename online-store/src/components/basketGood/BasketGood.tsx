@@ -10,11 +10,26 @@ interface PropsProduct{
     id: number,
     number: number
 }
-
-function BasketGood(props: PropsProduct){
+function deleteInIndex (data: ICard[],indexNumber: number): ICard[]{
+    return data.filter((product , index)=>{
+        if(index === indexNumber){
+            return false;
+        }
+        return true;
+    })
+}
+function findIndex(data: ICard[],id: number): number{
+    for(let i:number = data.length - 1; i >= 0; i--){
+        if(id === data[i].objProduct.id){
+            return i;
+        }
+    }
+    return -1;
+}
+function BasketGood(props: PropsProduct): JSX.Element{
     const [dataId, setDataId] = useState<number>(0);
     const { dataCart, setDataCart} = useContext(contextCart);
-    const addInCart = function(){
+    const addInCart = function(): void{
         const arr: ICard[] = [...dataCart];
         let numberOfGood: number = 0;
         numberOfGood = findIndex(arr,dataId);
@@ -25,7 +40,7 @@ function BasketGood(props: PropsProduct){
     useEffect(function(){
         setDataId(props.product.id);
     },[dataCart]);
-    const minusInCart = function(){
+    const minusInCart = function(): void{
         const arr: ICard[] = [...dataCart];
         let numberOfDeleted: number = 0;
         let arrb: ICard[] = [];
@@ -33,22 +48,6 @@ function BasketGood(props: PropsProduct){
         arrb = deleteInIndex(arr,numberOfDeleted)
         localStorage.setItem('dataCart',JSON.stringify(arrb));
         setDataCart(arrb);
-    }
-    const deleteInIndex = function(data: ICard[],indexNumber: number){
-        return data.filter((product , index)=>{
-            if(index === indexNumber){
-                return false;
-            }
-            return true;
-        })
-    }
-    const findIndex = function(data: ICard[],id: number){
-        for(let i:number = data.length - 1; i >= 0; i--){
-            if(dataId === data[i].objProduct.id){
-                return i;
-            }
-        }
-        return -1;
     }
     return(
         <div className = "good-body">
@@ -76,5 +75,5 @@ function BasketGood(props: PropsProduct){
         </div>
     )
 }
-
-export default BasketGood
+export {deleteInIndex, findIndex};
+export default BasketGood;
