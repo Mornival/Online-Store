@@ -1,8 +1,14 @@
 import {describe, expect, test} from '@jest/globals';
-import { dropGood } from '../Components/productDescriptionPage/ProductDescriptionPage';
-import { ICard } from '../types/types';
+import  { ICard } from '../types/types';
 // import { findSum,checkDiscount } from '../Components/basketSummary/BasketSummary';
 // import { findIndex, deleteInIndex } from '../Components/basketGood/BasketGood';
+const dropGood = function(data: ICard[],idGood: number){
+    return data.filter((v , i) => {
+        if(idGood !== data[i].objProduct.id){
+            return v;
+        }
+    });
+}
 let testObj:ICard[] = [
   {
       "objProduct": {
@@ -196,10 +202,13 @@ let endTestObj:ICard[] = [
 //     })
 //   })
 
-  describe('When have obj with id', () => {
-    it('returns the sum of those 2 numbers', () => {
+  describe('dropGood testing', () => {
+    it('return required object without object with delete id', () => {
       const result: ICard[] = dropGood(testObj,23);
       const expected = endTestObj;
       expect(result).toEqual(expected);
+    }),
+    it('return initial Object if id not found', () => {
+        expect(dropGood(testObj,180)).toEqual(testObj);
     })
   });
