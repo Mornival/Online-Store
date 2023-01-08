@@ -16,29 +16,29 @@ function ProductModal() {
     const submitOutBody = (event: React.MouseEvent<HTMLDivElement>) => {
         if (setModal && !endShop) setModal();
     }
-    const [endShop, setEndShop] = useState(false);
-    const [name, setName] = useState('');
-    const [nameDirty, setNameDirty] = useState(false);
-    const [nameError, setNameError] = useState('Name cannot be empty!');
-    const [adress, setAdress] = useState('');
-    const [adressDirty, setAdressDirty] = useState(false);
-    const [adressError, setAdressError] = useState('Adress cannot be empty!');
-    const [telephone, setTelephone] = useState('');
-    const [telephoneDirty, setTelephoneDirty] = useState(false);
-    const [telephoneError, setTelephoneError] = useState('Phone cannot be empty!');
-    const [email, setEmail] = useState('');
+    const [endShop, setEndShop] = useState<boolean>(false);
+    const [name, setName] = useState<string>('');
+    const [nameDirty, setNameDirty] = useState<boolean>(false);
+    const [nameError, setNameError] = useState<string>('Name cannot be empty!');
+    const [adress, setAdress] = useState<string>('');
+    const [adressDirty, setAdressDirty] = useState<boolean>(false);
+    const [adressError, setAdressError] = useState<string>('Adress cannot be empty!');
+    const [telephone, setTelephone] = useState<string>('');
+    const [telephoneDirty, setTelephoneDirty] = useState<boolean>(false);
+    const [telephoneError, setTelephoneError] = useState<string>('Phone cannot be empty!');
+    const [email, setEmail] = useState<string>('');
     const [emailDirty, setEmailDirty] = useState(false);
-    const [emailError, setEmailError] = useState('Email cannot be empty!');
-    const [cardNumber, setCardNumber] = useState('');
-    const [cardNumberDirty, setCardNumberDirty] = useState(false);
-    const [cardNumberError, setCardNumberError] = useState('Card Number cannot be empty!');
+    const [emailError, setEmailError] = useState<string>('Email cannot be empty!');
+    const [cardNumber, setCardNumber] = useState<string>('');
+    const [cardNumberDirty, setCardNumberDirty] = useState<boolean>(false);
+    const [cardNumberError, setCardNumberError] = useState<string>('Card Number cannot be empty!');
     const [validThru, setValidThru] = useState('');
-    const [validThruDirty, setValidThruDirty] = useState(false);
-    const [validThruError, setValidThruError] = useState('Valid THRU cannot be empty!');
-    const [cvv, setCvv] = useState('');
-    const [cvvDirty, setCvvDirty] = useState(false);
-    const [cvvError, setCvvError] = useState('CVV cannot be empty!');
-    const [formValid, setFormValid] = useState(false);
+    const [validThruDirty, setValidThruDirty] = useState<boolean>(false);
+    const [validThruError, setValidThruError] = useState<string>('Valid THRU cannot be empty!');
+    const [cvv, setCvv] = useState<string>('');
+    const [cvvDirty, setCvvDirty] = useState<boolean>(false);
+    const [cvvError, setCvvError] = useState<string>('CVV cannot be empty!');
+    const [formValid, setFormValid] = useState<boolean>(false);
     const cvvHandler = (e: React.FormEvent<HTMLInputElement>) => {
         if (e.currentTarget.value.charCodeAt((e.currentTarget.value.length - 1)) < 48 ||
             e.currentTarget.value.charCodeAt((e.currentTarget.value.length - 1)) > 57) {

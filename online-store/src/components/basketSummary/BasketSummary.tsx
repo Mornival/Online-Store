@@ -70,7 +70,6 @@ function BasketSummary(props: PropsProds){
     const checkDiscount = (arrUsed: string[]) =>{
         let discountCoef: number = 1;
         discountCoef = 1 - (arrUsed.length/10);
-        console.log(discountCoef);
         setCoef(discountCoef)
     }
     const clickButton = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -2,11 +2,10 @@ import React, { useContext, useState , useEffect} from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './BasketOfSelectedGoods.scss'
 import { IProduct } from '../../types/types';
-import ProductDescription from '../productDescriptionPage/ProductDescriptionPage';
 import ProductModal from '../productModalWindow/ProductModalWindow';
 import BasketGood from '../basketGood/BasketGood';
 import BasketSummary from '../basketSummary/BasketSummary';
-import ModalContext, { DescriptionContext } from '../context/OtherContexts';
+import ModalContext from '../context/OtherContexts';
 import ContextCart from '../context/contextCart';
 import qs from 'qs';
 interface ICart {
@@ -61,8 +60,8 @@ function BasketOfGoods() {
         }
         if(+numberPage < Math.ceil(numberOfGoods/resultNumber)){
             numberPage = (+numberPage + 1).toString();
-            const queryString = window.location.search.substring(1);
-            const queryObj = qs.parse(queryString);
+            const queryString: string = window.location.search.substring(1);
+            const queryObj: qs.ParsedQs = qs.parse(queryString);
             searchParams.set('page',numberPage);
             setSearchParams({ ...queryObj, page: numberPage});
         }
@@ -79,8 +78,8 @@ function BasketOfGoods() {
         }
         while(+numberPage !== 1 && +numberPage > Math.ceil(numberOfGoods/resultNumber)){
             numberPage = Math.ceil(numberOfGoods/resultNumber).toString();
-            const queryString = window.location.search.substring(1);
-            const queryObj = qs.parse(queryString);
+            const queryString: string = window.location.search.substring(1);
+            const queryObj: qs.ParsedQs = qs.parse(queryString);
             searchParams.set('page',numberPage);
             setSearchParams({ ...queryObj, page: numberPage});
         }
@@ -88,8 +87,8 @@ function BasketOfGoods() {
     const pageChangeMinus = () => {
         if(+numberPage > 1){
             numberPage = (+numberPage - 1).toString();
-            const queryString = window.location.search.substring(1);
-            const queryObj = qs.parse(queryString);
+            const queryString: string = window.location.search.substring(1);
+            const queryObj: qs.ParsedQs = qs.parse(queryString);
             setSearchParams({ ...queryObj, page: numberPage});
             searchParams.set('page',numberPage);
         }

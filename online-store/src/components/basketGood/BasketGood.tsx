@@ -5,8 +5,6 @@ import './BasketGood.scss';
 import contextCart from "../context/contextCart";
 import { ICard } from "../../types/types";
 import { Link } from 'react-router-dom';
-import defaultImage from '../mainHeader/cart.png'
-import  contextProducts from '../context/contextProducts'
 interface PropsProduct{
     product: IProduct,
     productId: number,
@@ -15,17 +13,15 @@ interface PropsProduct{
 }
 
 function BasketGood(props: PropsProduct){
-    const [dataId, setDataId] = useState(0);
+    const [dataId, setDataId] = useState<number>(0);
     let { setDescrition } = useContext(DescriptionContext);
     const { dataCart, setDataCart} = useContext(contextCart);
-    const selectedProducts: IProduct[] = dataCart.map(item => item.objProduct);
     const clickImage = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
-        console.log(dataId);
         if(setDescrition) setDescrition();
     }
     const addInCart = function(){
-        const arr = [...dataCart];
+        const arr: ICard[] = [...dataCart];
         let numberOfGood: number = 0;
         for(let i: number = 0; i < arr.length; i++){
             if(dataId === arr[i].objProduct.id){
@@ -41,7 +37,7 @@ function BasketGood(props: PropsProduct){
         setDataId(props.product.id);
     },[dataCart]);
     const minusInCart = function(){
-        const arr = [...dataCart];
+        const arr: ICard[] = [...dataCart];
         let numberOfDeleted: number = 0;
         let arrb: ICard[] = [];
         for(let i = arr.length - 1; i >= 0; i--){
