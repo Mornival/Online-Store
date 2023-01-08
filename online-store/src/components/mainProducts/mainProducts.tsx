@@ -1,7 +1,6 @@
 import MainProductsItem from '../mainProductsItem/mainProductsItem';
 import { useEffect, useState } from 'react';
 import { defaultDataProducts } from '../../data/data';
-import { IProduct, IDataSlider } from '../../types/types';
 import './mainProducts.scss';
 import bigMenu from './small.svg';
 import smallMenu from './big.svg';
@@ -13,6 +12,7 @@ import ContextSearchPanel from '../context/contextSearchPanel';
 import ContextSort from '../context/contextSort';
 import { useSearchParams } from 'react-router-dom';
 import qs from 'qs';
+import { searchProducts, updateBrand, updateCategory, sortProducts, updatePrice, updateStock } from './filteredFunctions';
 
 const MainProducts = () => {
     const { products } = defaultDataProducts;
@@ -46,21 +46,6 @@ const MainProducts = () => {
         });
     }
 
-    function searchProducts(products: IProduct[], searchData: string): IProduct[] {
-        if (searchData.length === 0) {
-            return products;
-        }
-        return products.filter(item => {
-            return item.category.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
-                item.brand.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
-                item.title.toLowerCase().indexOf(searchData.toLowerCase()) > -1 ||
-                item.price.toString().indexOf(searchData) > -1 ||
-                item.stock.toString().indexOf(searchData) > -1 ||
-                item.rating.toString().indexOf(searchData) > -1 ||
-                item.discountPercentage.toString().indexOf(searchData) > -1
-        })
-    }
-
     function onUpdateSearch(e: React.ChangeEvent<HTMLInputElement>): void {
         const searchValue = (e.target as HTMLInputElement).value;
         setDataSearchPanel(searchValue);
@@ -69,50 +54,6 @@ const MainProducts = () => {
         setSearchParams({
             ...queryObj, post: searchValue
         });
-    }
-
-    function updateCategory(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
-        if (!checkedInputs || !checkedInputs[0]) {
-            return products;
-        }
-        if (checkedInputs.length === 0) {
-            return products;
-        }
-        const filteredArr: IProduct[] = [];
-        for (let filter of checkedInputs) {
-            products.forEach(item => {
-                if (item.category === filter) {
-                    filteredArr.push(item);
-                }
-            })
-        }
-        return filteredArr;
-    }
-    function updateBrand(products: IProduct[], checkedInputs: (string | undefined)[]): IProduct[] {
-        if (!checkedInputs || !checkedInputs[0]) {
-            return products;
-        }
-        if (checkedInputs.length === 0) {
-            return products;
-        }
-        const filteredArr: IProduct[] = [];
-        for (let filter of checkedInputs) {
-            products.forEach(item => {
-                if (item.brand === filter) {
-                    filteredArr.push(item);
-                }
-            })
-        }
-        return filteredArr;
-    }
-
-    function updatePrice(products: IProduct[], state: IDataSlider): IProduct[] {
-        const { minPrice, maxPrice } = state;
-        return products.filter(item => item.price >= minPrice && item.price <= maxPrice)
-    }
-    function updateStock(products: IProduct[], state: IDataSlider): IProduct[] {
-        const { minStock, maxStock } = state;
-        return products.filter(item => item.stock >= minStock && item.stock <= maxStock)
     }
 
     useEffect(() => {
@@ -130,26 +71,6 @@ const MainProducts = () => {
         setSearchParams({
             ...queryObj, sort: whatSort
         });
-    }
-
-    function sortProducts(products: IProduct[], kindOfSort: string): IProduct[] {
-        const res = [...products];
-        switch (kindOfSort) {
-            case 'price-ASC':
-                return res.sort((a, b) => a.price - b.price);
-            case 'price-DESC':
-                return res.sort((a, b) => b.price - a.price);
-            case 'rating-ASC':
-                return res.sort((a, b) => a.rating - b.rating);
-            case 'rating-DESC':
-                return res.sort((a, b) => b.rating - a.rating);
-            case 'discount-ASC':
-                return res.sort((a, b) => a.discountPercentage - b.discountPercentage);
-            case 'discount-DESC':
-                return res.sort((a, b) => b.discountPercentage - a.discountPercentage);
-            default:
-                return res;
-        }
     }
 
     function changeDomStateOfSelectOptions() {
