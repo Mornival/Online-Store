@@ -61,10 +61,14 @@ function BasketSummary(props: PropsProds){
     const deletePromo = () => {
         let arrUsed: string[] = [...usedPromocods];
         arrUsed.shift();
+        let inputPromo: HTMLInputElement|null = document.querySelector('.promo-input');
+        if(inputPromo){
+            inputPromo.value = '';
+        }
         setUsedPromocods([...arrUsed]);
         checkDiscount(arrUsed);
     }
-    const checkDiscount = (arrUsed: string[]) =>{
+    const checkDiscount = (arrUsed: string[]) => {
         let discountCoef: number = 1;
         discountCoef = 1 - (arrUsed.length/10);
         setCoef(discountCoef)
@@ -75,16 +79,23 @@ function BasketSummary(props: PropsProds){
             setModal();
         }
     }
+    const showUsedPromocods = () => {
+        return usedPromocods.map((v) => {
+            return <p>'{v}':10%</p>;
+        })
+    }
     return(
         <>
         <div className = "summary-body">
             <h2>Products:<span>{prodsNumber}</span></h2>
             <h2>Total:{coef < 1 && <span className='initial-sum'>€{(prodsAmount/coef).toFixed(2)}</span>}<span>€{prodsAmount.toFixed(2)}</span></h2>
             <form>
-                <input type = "text" placeholder="Enter promo code" onInput={(event) => checkPromocode(event)}/>
+                <input type = "text" placeholder="Enter promo code" className="promo-input" onInput={(event) => checkPromocode(event)}/>
                 <p>Promo for test: 'RS', 'EPM'</p>
                 {findedPromocods.length > 0 && <button onClick={addPromo} type = "button">add promo</button>}
                 {usedPromocods.length > 0 && <button onClick={deletePromo} type = "button">delete promo</button>}
+                {usedPromocods.length > 0 && <p>Used promocods</p>}
+                {usedPromocods.length > 0 && showUsedPromocods()}
                 <button onClick={clickButton} type = "button">BUY NOW</button>
             </form>
         </div>
