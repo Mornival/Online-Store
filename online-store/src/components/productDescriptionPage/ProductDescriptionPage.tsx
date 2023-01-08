@@ -5,15 +5,9 @@ import ModalContext from '../context/OtherContexts';
 import { Link , useParams , Params} from 'react-router-dom';
 import ContextCart from '../context/contextCart';
 import { ICard } from '../../types/types';
+import { dropGood } from './dropGood';
 interface goodDescription{
     products: IProduct[];
-}
-const dropGood = function(data: ICard[],idGood: number){
-    return data.filter((v , i) => {
-        if(idGood !== data[i].objProduct.id){
-            return v;
-        }
-    });
 }
 function ProductDescription(goods: goodDescription){
     const id:Readonly<Params<string>> = useParams();

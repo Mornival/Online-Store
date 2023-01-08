@@ -3,18 +3,10 @@ import { useContext , useState} from 'react';
 import { ICard, IProduct } from '../../types/types';
 import ModalContext from '../context/OtherContexts';
 import contextCart from '../context/contextCart';
-
+import { findSum } from './findSum';
+import { checkDiscount } from './checkDiscount';
 interface PropsProds{
     prods: IProduct[];
-}
-const findSum = (data: ICard[],coef:number) =>{
-    let prodsAmount:number = data.reduce((acum,cur) => acum + cur.objProduct.price * coef,0);
-    return prodsAmount;
-}
-const checkDiscount = (arrUsed: string[]): number=> {
-    let discountCoef: number = 1;
-    discountCoef = 1 - (arrUsed.length/10);
-    return discountCoef;
 }
 function BasketSummary(prods: PropsProds): JSX.Element{
     let prodsNumber: number = 0;
@@ -104,5 +96,4 @@ function BasketSummary(prods: PropsProds): JSX.Element{
         </>
     )
 }
-export {findSum, checkDiscount}
 export default BasketSummary;

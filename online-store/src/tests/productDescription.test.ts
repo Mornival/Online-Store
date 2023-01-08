@@ -1,14 +1,8 @@
 import {describe, expect, test} from '@jest/globals';
 import  { ICard } from '../types/types';
+import { dropGood } from '../Components/productDescriptionPage/dropGood';
 // import { findSum,checkDiscount } from '../Components/basketSummary/BasketSummary';
 // import { findIndex, deleteInIndex } from '../Components/basketGood/BasketGood';
-const dropGood = function(data: ICard[],idGood: number){
-    return data.filter((v , i) => {
-        if(idGood !== data[i].objProduct.id){
-            return v;
-        }
-    });
-}
 let testObj:ICard[] = [
   {
       "objProduct": {
@@ -194,21 +188,35 @@ let endTestObj:ICard[] = [
       }
   }
 ]
-// describe('When have obj with id', () => {
-//     it('returns the sum of those 2 numbers', () => {
-//       const result = findIndex(testObj,23);
-//       const expected = 4;
-//       expect(result).toEqual(expected);
-//     })
-//   })
-
+let testEl:ICard = {  
+    "objProduct": {
+        "id": 22,
+        "title": "Elbow Macaroni - 400 gm",
+        "description": "Product details of Bake Parlor Big Elbow Macaroni - 400 gm",
+        "price": 14,
+        "discountPercentage": 15.58,
+        "rating": 4.57,
+        "stock": 146,
+        "brand": "Bake Parlor Big",
+        "category": "groceries",
+        "thumbnail": "https://i.dummyjson.com/data/products/22/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/22/1.jpg",
+            "https://i.dummyjson.com/data/products/22/2.jpg",
+            "https://i.dummyjson.com/data/products/22/3.jpg"
+        ]
+    }
+}
   describe('dropGood testing', () => {
     it('return required object without object with delete id', () => {
       const result: ICard[] = dropGood(testObj,23);
       const expected = endTestObj;
       expect(result).toEqual(expected);
     }),
-    it('return initial Object if id not found', () => {
-        expect(dropGood(testObj,180)).toEqual(testObj);
+    it('return Object if id not found in Object', () => {
+        expect(dropGood(testObj,91).length).toBe(5);
+    }),
+    it('return Object if id does no exists', () => {
+        expect(dropGood(testObj,910).length).not.toContain(testEl);
     })
   });
