@@ -4,27 +4,13 @@ import './BasketGood.scss';
 import contextCart from "../context/contextCart";
 import { ICard } from "../../types/types";
 import { Link } from 'react-router-dom';
+import { deleteInIndex } from "./deleteInIndex";
+import { findIndex } from "./findIndex";
 interface PropsProduct{
     product: IProduct,
     productId: number,
     id: number,
     number: number
-}
-function deleteInIndex (data: ICard[],indexNumber: number): ICard[]{
-    return data.filter((product , index)=>{
-        if(index === indexNumber){
-            return false;
-        }
-        return true;
-    })
-}
-function findIndex(data: ICard[],id: number): number{
-    for(let i:number = data.length - 1; i >= 0; i--){
-        if(id === data[i].objProduct.id){
-            return i;
-        }
-    }
-    return -1;
 }
 function BasketGood(props: PropsProduct): JSX.Element{
     const [dataId, setDataId] = useState<number>(0);
@@ -33,7 +19,9 @@ function BasketGood(props: PropsProduct): JSX.Element{
         const arr: ICard[] = [...dataCart];
         let numberOfGood: number = 0;
         numberOfGood = findIndex(arr,dataId);
-        arr.push(arr[numberOfGood]);
+        if(numberOfGood !== -1){
+            arr.push(arr[numberOfGood]);
+        }
         localStorage.setItem('dataCart',JSON.stringify(arr));
         setDataCart(arr);
     }
@@ -45,7 +33,9 @@ function BasketGood(props: PropsProduct): JSX.Element{
         let numberOfDeleted: number = 0;
         let arrb: ICard[] = [];
         numberOfDeleted = findIndex(arr,dataId);
-        arrb = deleteInIndex(arr,numberOfDeleted)
+        if(numberOfDeleted !== -1){
+            arrb = deleteInIndex(arr,numberOfDeleted);
+        }
         localStorage.setItem('dataCart',JSON.stringify(arrb));
         setDataCart(arrb);
     }

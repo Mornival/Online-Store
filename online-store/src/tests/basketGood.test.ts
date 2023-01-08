@@ -1,8 +1,8 @@
-import {describe, expect, test} from '@jest/globals';
+import { describe, expect, test } from '@jest/globals';
 import { ICard } from '../types/types';
-import { findSum } from '../Components/basketSummary/findSum';
-import { checkDiscount } from '../Components/basketSummary/checkDiscount';
-let testObj:ICard[] = [
+import { findIndex } from '../Components/basketGood/findIndex';
+import { deleteInIndex } from '../Components/basketGood/deleteInIndex';
+let testObj: ICard[] = [
     {
         "objProduct": {
             "id": 17,
@@ -105,38 +105,30 @@ let testObj:ICard[] = [
         }
     }
 ]
-let testDiscount: string[] = ['RS','EPM','RISE'];
-describe('findSum testing', () => {
-    it('return sum if coef = 1', () => {
-      const result: number = findSum(testObj,1);
-      const expected = 66;
-      expect(result).toBe(expected);
-    }),
-    it('return sum if coef = 0.9', () => {
-        const result: number = findSum(testObj,0.9);
-        const expected = 59.4;
-        expect(+result.toFixed(1)).toBe(expected);
-      }),
-      it('return sum if Object is empty', () => {
-        const result: number = findSum([],1);
-        expect(+result.toFixed(1)).toBeDefined();
-      })
-  });
-
-  describe('checkDiscount testing', () => {
-    it('return coef = 0.7 if Array length = 3', () => {
-      const result: number = checkDiscount(testDiscount);
-      const expected = 0.7;
-      expect(result).toBe(expected);
-    }),
-    it('return coef == 0.8 if Array length = 2', () => {
-        testDiscount.pop()
-        const result: number = checkDiscount(testDiscount);
-        const expected = 0.8;
+describe('findIndex testing', () => {
+    it('return index of Object', () => {
+        const result: number = findIndex(testObj, 22);
+        const expected = 3;
         expect(result).toBe(expected);
-      }),
-      it('return coef=1 if Object is empty', () => {
-        const result: number = checkDiscount([]);
-        expect(result).toBeDefined();
-      })
-  });
+    }),
+        it('return -1 if Object is empty', () => {
+            const result: number = findIndex([], 10);
+            expect(+result.toFixed(1)).toBeDefined();
+        })
+});
+
+describe('deleteInIndex testing', () => {
+    it('return Object without element in index', () => {
+        const result: ICard[] = deleteInIndex(testObj, 4);
+        expect(result.length + 1).toBe(testObj.length);
+    }),
+    it('deleted item not exists in returned object', () => {
+        const result: ICard[] = deleteInIndex(testObj, 4);
+        const elem: ICard = testObj[4];
+        expect(result).not.toContain(elem);
+    }),
+    it('return initial Object if index not exists', () => {
+        const result: ICard[] = deleteInIndex(testObj, 10);
+        expect(result.length).toBe(testObj.length);
+    })
+});

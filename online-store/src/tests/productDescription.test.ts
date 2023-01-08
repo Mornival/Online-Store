@@ -1,8 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
 import  { ICard } from '../types/types';
 import { dropGood } from '../Components/productDescriptionPage/dropGood';
-// import { findSum,checkDiscount } from '../Components/basketSummary/BasketSummary';
-// import { findIndex, deleteInIndex } from '../Components/basketGood/BasketGood';
 let testObj:ICard[] = [
   {
       "objProduct": {
@@ -217,6 +215,6 @@ let testEl:ICard = {
         expect(dropGood(testObj,91).length).toBe(5);
     }),
     it('return Object if id does no exists', () => {
-        expect(dropGood(testObj,910).length).not.toContain(testEl);
+        expect(dropGood(testObj,910)).not.toContain(testEl);
     })
   });
