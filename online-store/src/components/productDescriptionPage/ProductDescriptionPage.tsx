@@ -32,12 +32,15 @@ function ProductDescription(goods: goodDescription){
     })
     const [hasInCart, SetHasInCart] = useState(hasProductInCart);
     let {modal, setModal} = useContext(ModalContext);
-    const clickDrop = (e: React.MouseEvent) => {
-        const arr: ICard[] = dataCart.filter((v , i) => {
-            if(good.id !== dataCart[i].objProduct.id){
+    const dropGood = function(data: ICard[],idGood: number){
+        return data.filter((v , i) => {
+            if(idGood !== data[i].objProduct.id){
                 return v;
             }
         });
+    }
+    const clickDrop = (e: React.MouseEvent) => {
+        const arr: ICard[] = dropGood(dataCart,good.id);
         SetHasInCart(false);
         localStorage.setItem('dataCart',JSON.stringify(arr));
         setDataCart(arr);

@@ -1,6 +1,5 @@
 import { IProduct } from "../../types/types";
-import React, { useState , useContext, useEffect} from 'react';
-import { DescriptionContext } from "../context/OtherContexts";
+import { useState , useContext, useEffect} from 'react';
 import './BasketGood.scss';
 import contextCart from "../context/contextCart";
 import { ICard } from "../../types/types";
@@ -14,21 +13,11 @@ interface PropsProduct{
 
 function BasketGood(props: PropsProduct){
     const [dataId, setDataId] = useState<number>(0);
-    let { setDescrition } = useContext(DescriptionContext);
     const { dataCart, setDataCart} = useContext(contextCart);
-    const clickImage = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        if(setDescrition) setDescrition();
-    }
     const addInCart = function(){
         const arr: ICard[] = [...dataCart];
         let numberOfGood: number = 0;
-        for(let i: number = 0; i < arr.length; i++){
-            if(dataId === arr[i].objProduct.id){
-                numberOfGood = i;
-                break;
-            }
-        }
+        numberOfGood = findIndex(arr,dataId);
         arr.push(arr[numberOfGood]);
         localStorage.setItem('dataCart',JSON.stringify(arr));
         setDataCart(arr);
@@ -40,25 +29,31 @@ function BasketGood(props: PropsProduct){
         const arr: ICard[] = [...dataCart];
         let numberOfDeleted: number = 0;
         let arrb: ICard[] = [];
-        for(let i = arr.length - 1; i >= 0; i--){
-            if(dataId === arr[i].objProduct.id){
-                numberOfDeleted = i;
-                break;
-            }
-        }
-        arrb = arr.filter((product , index)=>{
-            if(index === numberOfDeleted){
+        numberOfDeleted = findIndex(arr,dataId);
+        arrb = deleteInIndex(arr,numberOfDeleted)
+        localStorage.setItem('dataCart',JSON.stringify(arrb));
+        setDataCart(arrb);
+    }
+    const deleteInIndex = function(data: ICard[],indexNumber: number){
+        return data.filter((product , index)=>{
+            if(index === indexNumber){
                 return false;
             }
             return true;
         })
-        localStorage.setItem('dataCart',JSON.stringify(arrb));
-        setDataCart(arrb);
+    }
+    const findIndex = function(data: ICard[],id: number){
+        for(let i:number = data.length - 1; i >= 0; i--){
+            if(dataId === data[i].objProduct.id){
+                return i;
+            }
+        }
+        return -1;
     }
     return(
         <div className = "good-body">
             <div className="good-id">{props.id + 1}</div>
-            <div className = "good-image" onClick={clickImage}>
+            <div className = "good-image">
                 <Link to = {`/details/${props.productId}`}><img src = {props.product.thumbnail} alt = "good"/></Link>
             </div>
             <div className = "good-info">

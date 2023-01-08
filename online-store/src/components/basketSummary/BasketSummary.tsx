@@ -1,6 +1,6 @@
 import './BasketSummary.scss'
 import { useContext , useState} from 'react';
-import { IProduct } from '../../types/types';
+import { ICard, IProduct } from '../../types/types';
 import ModalContext from '../context/OtherContexts';
 import contextCart from '../context/contextCart';
 
@@ -17,15 +17,15 @@ function BasketSummary(props: PropsProds){
     const [findedPromocods, setFindedPromocods] = useState<string[]>([]);
     const [usedPromocods, setUsedPromocods] = useState<string[]>([]);
     prodsNumber = dataCart.length;
-    const findSum = () =>{
-        prodsAmount = dataCart.reduce((acum,cur) => acum + cur.objProduct.price * coef,0)
+    const findSum = (data: ICard[]) =>{
+        prodsAmount = data.reduce((acum,cur) => acum + cur.objProduct.price * coef,0)
     }
-    findSum();
+    findSum(dataCart);
     const checkPromocode = (event: React.FormEvent<HTMLInputElement>) => {
         let currentCode: string = event.currentTarget.value;
         let arr: string[] = [...findedPromocods];
         let arrb: string[] = [...usedPromocods];
-        promocods.forEach((v , i , a) => {
+        promocods.forEach((v) => {
             if(currentCode.indexOf(v) >= 0 && !arr.includes(v) && !arrb.includes(v)){
                 arr.push(v);
             } else if(currentCode.indexOf(v) === -1 && arr.includes(v)){
@@ -60,11 +60,8 @@ function BasketSummary(props: PropsProds){
     }
     const deletePromo = () => {
         let arrUsed: string[] = [...usedPromocods];
-        let arrFinded: string[] = [...findedPromocods];
-        arrFinded.push(usedPromocods[0]);
         arrUsed.shift();
         setUsedPromocods([...arrUsed]);
-        setFindedPromocods([...arrFinded]);
         checkDiscount(arrUsed);
     }
     const checkDiscount = (arrUsed: string[]) =>{

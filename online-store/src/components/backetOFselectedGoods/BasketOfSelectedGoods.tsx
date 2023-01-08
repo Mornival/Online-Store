@@ -24,9 +24,9 @@ function BasketOfGoods() {
     const cart: ICart[] = dataCart;
     const selectedProducts: IProduct[] = cart.map(item => item.objProduct);
     let numbersOfGoods: { [index: number]: number };
-    function uniqueObjByPos() {
+    function uniqueObjByPos(prods: IProduct[]) {
         const unique: { [index: number]: number } = {};
-        const uniquePos = selectedProducts.filter(item => {
+        const uniquePos = prods.filter(item => {
             if (unique[item.id]) {
                 unique[item.id] += 1;
                 return false;
@@ -37,7 +37,7 @@ function BasketOfGoods() {
         numbersOfGoods = unique;
         return uniquePos;
     }
-    let cartGoods: IProduct[] = uniqueObjByPos();
+    let cartGoods: IProduct[] = uniqueObjByPos(selectedProducts);
     let numberOfGoods: number = cartGoods.length;
     const inputChange = (event: React.FormEvent<HTMLInputElement>) => {
         let numberInInput: string = event.currentTarget.value;
@@ -68,7 +68,7 @@ function BasketOfGoods() {
     }
     const pageChange = () => {
         let resultNumber:number = 0;
-        cartGoods = uniqueObjByPos();
+        cartGoods = uniqueObjByPos(selectedProducts);
         numberOfGoods = cartGoods.length;
         numberInput = searchParams.get('input');
         if(numberInput === null || +numberInput === 0){
