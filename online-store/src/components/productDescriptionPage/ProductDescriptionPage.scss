@@ -1,0 +1,136 @@
+.description-container{
+    position:relative;
+    margin-top:20px;
+    margin-bottom:20px;
+    width:90%;
+    margin-left:5%;
+    background:#181a1c;
+    border-radius:20px;
+    border:3px solid grey;
+}
+
+.description-top{
+    width:100%;
+    color:lightgrey;
+    padding-bottom:10px;
+    display: flex;
+    font-size:1.5rem;
+    justify-content: space-around;
+    padding-bottom:10px;
+    border-bottom:3px solid grey;
+}
+.description-top-p{
+    margin-top:20px;
+    text-transform: uppercase;
+    &:first-child{
+        cursor:pointer;
+        margin-left:0px;
+        a{
+            text-decoration: none;
+            color:lightgrey;
+        }
+        &:hover{
+            opacity:0.6;
+        }
+        &:active{
+            opacity:0.3;
+        }
+    }
+}
+.description-body{
+    display: flex;
+}
+.description-name{
+    color:lightgrey;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:10px;
+    margin-bottom:10px;
+    font-size:2rem;
+    border-bottom:2px solid grey;
+}
+.description-images{
+    display: flex;
+    flex-direction: column;
+    margin-left:10px;
+    margin-right:10px;
+    width:10%;
+    &__image{
+        margin:10px 0;
+        width:100%;
+        border-radius:5px;
+        border:2px solid grey;
+        cursor:pointer;
+    }
+}
+.description-main-image{
+    display: flex;
+    width:30%;
+    align-items: center;
+    img{
+        width:100%;
+    }
+}
+
+.description-data{
+    width:40%;
+    margin-left:10px;
+    &__item{
+        width:100%;
+        border:2px solid grey;
+        border-radius:5px;
+        margin-top:10px;
+        &:last-child{
+            margin-bottom:10px;
+        }
+    }
+    color:lightgrey;
+    text-align:center;
+    h2{
+        font-size:2rem;
+        color:#181a1c;
+        background:lightgrey;
+        border-top-left-radius:5px;
+        border-top-right-radius:5px;
+    }
+    p{
+        margin:5px 0;
+        font-size:1.2rem;
+        border-radius:3px;
+    }
+}
+
+.description-buy{
+    width:20%;
+    margin-left:calc(10% - 75px);
+    h2{
+        margin-top:50px;
+        width:150px;
+        color:lightgrey;
+        font-size:3rem;
+        text-align:center;
+    }
+    a{
+        text-decoration: none;
+        color:#181a1c;
+    }
+    .description-button{
+        cursor:pointer;
+        display: block;
+        margin:0 10px;
+        margin-top:30px;
+        width:150px;
+        font-size:2rem;
+        padding:5px;
+        border:3px solid grey;
+        border-radius:10px;
+        background:lightgrey;
+        &:hover{
+            opacity:0.6;
+        }
+        &:active{
+            opacity:0.3;
+        }
+    }
+}
