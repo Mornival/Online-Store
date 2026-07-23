@@ -7,6 +7,7 @@ import MainFilterPosition from './Components/mainFilterPosition/mainFilterPositi
 import MainProducts from './Components/mainProducts/mainProducts';
 import MainFooter from './Components/mainFooter/mainFooter';
 import BasketOfGoods from './Components/backetOFselectedGoods/BasketOfSelectedGoods';
+import CheckoutPage from './Components/CheckoutPage/CheckoutPage';
 import { defaultDataProducts } from './data/data';
 import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
 import Page404 from './Components/Page404/Page404';
@@ -19,7 +20,7 @@ import ContextFilter from './Components/context/contextFilter';
 import ContextSlider from './Components/context/contextSlider';
 import ContextSearchPanel from './Components/context/contextSearchPanel';
 import ContextSort from './Components/context/contextSort';
-import ModalContext, { defaultModal, DescriptionContext, defaultDescription } from './Components/context/OtherContexts';
+import ModalContext, { defaultModal, DescriptionContext, defaultDescription, FavContext } from './Components/context/OtherContexts';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -41,6 +42,20 @@ function App() {
   const [open, toggleDescription] = useState(defaultDescription.open);
   const setModal = () => { toggleModal(!modal) };
   const setDescrition = () => { toggleDescription(!open) };
+
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem('favorites');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+  const toggleFavorite = (id: number) => {
+    setFavorites(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem('favorites', JSON.stringify(next));
+      return next;
+    });
+  };
 
   const prices: number[] = dataProducts.map(item => item.price);
   const stocks: number[] = dataProducts.map(item => item.stock);
@@ -88,7 +103,7 @@ function App() {
                     open,
                     setDescrition
                   }}>
-
+                    <FavContext.Provider value={{ favorites, toggleFavorite }}>
 
                     <Router>
                       <MainHeader />
@@ -109,13 +124,14 @@ function App() {
                           </MainContent>}
                         />
                         <Route path='/details/:id' element={<ProductDescription products={dataProducts}/>} />
-                        <Route path='*' element={<Page404 />} />
                         <Route path='/basket' element={<BasketOfGoods />} />
+                        <Route path='/checkout' element={<CheckoutPage />} />
+                        <Route path='*' element={<Page404 />} />
                       </Routes>
                       <MainFooter />
                     </Router>
 
-
+                    </FavContext.Provider>
                   </DescriptionContext.Provider>
                 </ModalContext.Provider>
               </ContextSort.Provider>

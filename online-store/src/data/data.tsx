@@ -1,4 +1,5 @@
-import { IDataProducts } from "../types/types"
+import { IDataProducts, IProduct } from "../types/types"
+import { getImages } from "./imageHelper"
 
 export const defaultDataProducts: IDataProducts = {
     products: [
@@ -1846,3 +1847,9 @@ export const defaultDataProducts: IDataProducts = {
     skip: 0,
     limit: 100
   }
+
+// Replace broken dummyjson URLs with real Unsplash images
+defaultDataProducts.products = defaultDataProducts.products.map((p: IProduct) => {
+  const { thumbnail, images } = getImages(p.title, p.category, Math.min(p.images.length, 4), p.id);
+  return { ...p, thumbnail, images };
+})

@@ -1,30 +1,40 @@
 .filters{
-    width: 27%;
-    background-color: #181a1c;
-    border-radius: 10px;
-    padding: 15px;
-    height: max-content;
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: sticky;
+    top: 80px;
 
-    &__buttons{
+    &__reset{
         width: 100%;
-        display: flex;
-        justify-content: space-between;
+        height: 40px;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        background-color: #fff;
+        color: #999;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-family: inherit;
 
-        button{
-            border: 1px solid lightgrey;
-            font-size: 17px;
-            height: 36px;
-            width: 40%;
-            border-radius: 5px;
-            background-color:#181a1c;
-            color: #fff;
-            cursor: pointer;
-            transition: .5s;
-
-            &:hover{
-                opacity: 0.6;
-            }
+        &:hover{
+            color: #cb11ab;
+            border-color: #cb11ab;
+            background-color: #fdf;
         }
+    }
 
+    // Each child filter group gets its own card
+    > .brand,
+    > .category,
+    > .slider,
+    > div {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 14px;
     }
 }

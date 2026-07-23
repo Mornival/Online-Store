@@ -5,23 +5,33 @@
 }
 
 body{
-    background-color: lightgrey;
+    background-color: #f0f0f0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #000;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.4;
+
     &::-webkit-scrollbar {
-        width: 12px;
+        width: 8px;
     }
 
     &::-webkit-scrollbar-track {
-        background: lightgrey;
-        border-radius: 10px;
+        background: #e8e8ed;
+        border-radius: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: black;
-        border: 1px solid lightgrey;
+        background-color: #c4c4c4;
+        border-radius: 4px;
+        &:hover {
+            background-color: #aaa;
+        }
     }
 }
 
 .container{
-    max-width: 1600px;
+    max-width: 1360px;
     margin: auto;
+    padding: 0 20px;
 }
