@@ -1,69 +1,89 @@
 import { IProduct } from "../../types/types";
-import { useState , useContext, useEffect} from 'react';
+import { useContext } from 'react';
 import './BasketGood.scss';
 import contextCart from "../context/contextCart";
 import { ICard } from "../../types/types";
 import { Link } from 'react-router-dom';
-import { deleteInIndex } from "./deleteInIndex";
-import { findIndex } from "./findIndex";
-interface PropsProduct{
-    product: IProduct,
-    productId: number,
-    id: number,
-    number: number
+
+const FALLBACK = 'https://placehold.co/120x120/e0e0e0/999?text=Нет+фото';
+
+interface Props {
+    product: IProduct;
+    quantity: number;
 }
-function BasketGood(props: PropsProduct): JSX.Element{
-    const [dataId, setDataId] = useState<number>(0);
-    const { dataCart, setDataCart} = useContext(contextCart);
-    const addInCart = function(): void{
-        const arr: ICard[] = [...dataCart];
-        let numberOfGood: number = 0;
-        numberOfGood = findIndex(arr,dataId);
-        if(numberOfGood !== -1){
-            arr.push(arr[numberOfGood]);
+
+function BasketGood({ product, quantity }: Props): JSX.Element {
+    const { dataCart, setDataCart } = useContext(contextCart);
+    const discountedPrice = Math.round(product.price * (1 - product.discountPercentage / 100));
+
+    const removeOne = () => {
+        if (quantity <= 1) {
+            // Last copy — remove all
+            const arr = dataCart.filter(item => item.objProduct.id !== product.id);
+            localStorage.setItem('dataCart', JSON.stringify(arr));
+            setDataCart(arr);
+        } else {
+            // More than 1 — remove just one copy
+            const arr = [...dataCart];
+            const idx = arr.findIndex(item => item.objProduct.id === product.id);
+            if (idx !== -1) {
+                arr.splice(idx, 1);
+                localStorage.setItem('dataCart', JSON.stringify(arr));
+                setDataCart(arr);
+            }
         }
-        localStorage.setItem('dataCart',JSON.stringify(arr));
+    };
+
+    const addOne = () => {
+        const arr: ICard[] = [...dataCart, { objProduct: product }];
+        localStorage.setItem('dataCart', JSON.stringify(arr));
         setDataCart(arr);
-    }
-    useEffect(function(){
-        setDataId(props.product.id);
-    },[dataCart]);
-    const minusInCart = function(): void{
-        const arr: ICard[] = [...dataCart];
-        let numberOfDeleted: number = 0;
-        let arrb: ICard[] = [];
-        numberOfDeleted = findIndex(arr,dataId);
-        if(numberOfDeleted !== -1){
-            arrb = deleteInIndex(arr,numberOfDeleted);
-        }
-        localStorage.setItem('dataCart',JSON.stringify(arrb));
-        setDataCart(arrb);
-    }
-    return(
-        <div className = "good-body">
-            <div className="good-id">{props.id + 1}</div>
-            <div className = "good-image">
-                <Link to = {`/details/${props.productId}`}><img src = {props.product.thumbnail} alt = "good"/></Link>
-            </div>
-            <div className = "good-info">
-                <h2>{props.product.title}</h2>
-                <p>{props.product.description}</p>
-                <div className = "good-info__rat-dis">
-                    <p>Rating: {props.product.rating}</p>
-                    <p>Discount: {props.product.discountPercentage}%</p>
+    };
+
+    const removeItem = () => {
+        const arr = dataCart.filter(item => item.objProduct.id !== product.id);
+        localStorage.setItem('dataCart', JSON.stringify(arr));
+        setDataCart(arr);
+    };
+
+    return (
+        <div className="cart-item">
+            <Link to={`/details/${product.id}`} className="cart-item__image">
+                <img
+                    src={product.thumbnail}
+                    alt={product.title}
+                    onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK; }}
+                />
+            </Link>
+
+            <div className="cart-item__info">
+                <Link to={`/details/${product.id}`} className="cart-item__title">{product.title}</Link>
+                <div className="cart-item__meta">
+                    <span>{product.brand}</span>
+                    <span>★ {product.rating}</span>
                 </div>
             </div>
-            <div className = "good-other-info">
-                <h2 className = "good-other-info__h2">Stock: {props.product.stock}</h2>
-                <div className="good-amount">
-                    <div className = "good-amount__plus" onClick={addInCart}>+</div>
-                    <h2 className = "good-amount__amount">{props.number}</h2>
-                    <div className = "good-amount__minus" onClick={minusInCart} >-</div>
+
+            <div className="cart-item__controls">
+                <div className="cart-item__qty">
+                    <button className="cart-item__qty-btn" onClick={removeOne}>−</button>
+                    <span className="cart-item__qty-val">{quantity}</span>
+                    <button className="cart-item__qty-btn" onClick={addOne}>+</button>
                 </div>
-                <h2 className = "money-price">€{props.product.price * props.number}</h2>
             </div>
+
+            <div className="cart-item__price">
+                <div className="cart-item__price-old">{product.price * quantity} ₽</div>
+                <div className="cart-item__price-new">{discountedPrice * quantity} ₽</div>
+            </div>
+
+            <button className="cart-item__remove" onClick={removeItem} title="Удалить">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                </svg>
+            </button>
         </div>
-    )
+    );
 }
-export {deleteInIndex, findIndex};
+
 export default BasketGood;

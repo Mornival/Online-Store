@@ -1,9 +1,11 @@
 .header{
     background-color: #cb11ab;
     height: 64px;
+    min-height: 64px;
+    max-height: 64px;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 box-shadow 0.3s ease,
                 background-color 0.3s ease;
@@ -64,6 +66,12 @@
             color: #fff;
             background: rgba(255,255,255,0.12);
         }
+
+        &--active {
+            color: #fff;
+            background: rgba(255,255,255,0.2);
+            font-weight: 700;
+        }
     }
 
     &__actions {
@@ -85,6 +93,10 @@
 
         &:hover {
             background: rgba(255,255,255,0.12);
+        }
+
+        &--active {
+            background: rgba(255,255,255,0.2);
         }
 
         svg {

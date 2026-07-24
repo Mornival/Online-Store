@@ -16,41 +16,15 @@ body {
     .container {
         max-width: 100%;
     }
-
-    .products {
-        width: 65%;
-    }
-
-    .filters {
-        width: 32%;
-    }
-}
-
-@media (max-width:1024px) {
-    .products {
-        width: 55%;
-    }
-
-    .filters {
-        width: 42%;
-    }
 }
 
 @media (max-width:860px) {
     .content{
         .container{
             flex-direction: column;
-            gap: 16px;
+            gap: 0;
             align-items: stretch;
         }
-    }
-
-    .products {
-        width: 100%;
-    }
-
-    .filters {
-        width: 100%;
     }
 }
 

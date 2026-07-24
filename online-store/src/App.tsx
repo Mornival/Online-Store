@@ -12,6 +12,9 @@ import { defaultDataProducts } from './data/data';
 import { ICard, IProduct, IDataFilter, IDataSlider } from './types/types';
 import Page404 from './Components/Page404/Page404';
 import ProductDescription from './Components/productDescriptionPage/ProductDescriptionPage';
+import PromotionsPage from './Components/PromotionsPage/PromotionsPage';
+import DeliveryPage from './Components/DeliveryPage/DeliveryPage';
+import FavoritesPage from './Components/FavoritesPage/FavoritesPage';
 import './App.scss';
 
 import ContextCart from './Components/context/contextCart';
@@ -20,7 +23,7 @@ import ContextFilter from './Components/context/contextFilter';
 import ContextSlider from './Components/context/contextSlider';
 import ContextSearchPanel from './Components/context/contextSearchPanel';
 import ContextSort from './Components/context/contextSort';
-import ModalContext, { defaultModal, DescriptionContext, defaultDescription, FavContext } from './Components/context/OtherContexts';
+import ModalContext, { defaultModal, DescriptionContext, defaultDescription, FavContext, SearchFocusContext } from './Components/context/OtherContexts';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -56,6 +59,9 @@ function App() {
       return next;
     });
   };
+
+  const [searchTrigger, setSearchTrigger] = useState(0);
+  const triggerSearch = () => setSearchTrigger(prev => prev + 1);
 
   const prices: number[] = dataProducts.map(item => item.price);
   const stocks: number[] = dataProducts.map(item => item.stock);
@@ -104,12 +110,13 @@ function App() {
                     setDescrition
                   }}>
                     <FavContext.Provider value={{ favorites, toggleFavorite }}>
+                    <SearchFocusContext.Provider value={{ searchTrigger, triggerSearch }}>
 
                     <Router>
                       <MainHeader />
                       <Routes>
                         <Route path='/' element={
-                          <MainContent>
+                          <MainContent renderFilters={() => (
                             <MainFilters>
                               <MainFilterPosition classPosition={'category'} />
                               <MainFilterPosition classPosition={'brand'} />
@@ -120,10 +127,14 @@ function App() {
                                 minValue={minStock}
                                 maxValue={maxStock} />
                             </MainFilters>
+                          )}>
                             <MainProducts />
                           </MainContent>}
                         />
                         <Route path='/details/:id' element={<ProductDescription products={dataProducts}/>} />
+                        <Route path='/promotions' element={<PromotionsPage />} />
+                        <Route path='/delivery' element={<DeliveryPage />} />
+                        <Route path='/favorites' element={<FavoritesPage />} />
                         <Route path='/basket' element={<BasketOfGoods />} />
                         <Route path='/checkout' element={<CheckoutPage />} />
                         <Route path='*' element={<Page404 />} />
@@ -131,6 +142,7 @@ function App() {
                       <MainFooter />
                     </Router>
 
+                    </SearchFocusContext.Provider>
                     </FavContext.Provider>
                   </DescriptionContext.Provider>
                 </ModalContext.Provider>
